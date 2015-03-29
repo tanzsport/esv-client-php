@@ -1,0 +1,6 @@
+.env.json
+.idea
+.DS_Store
+docs/
+reports/
+vendor/

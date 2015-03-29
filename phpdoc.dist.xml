@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>ESV API-Client Tanzsport Deutschland</title>
+    <parser>
+        <target>docs/api</target>
+        <encoding>utf-8</encoding>
+    </parser>
+    <transformer>
+        <target>docs/api</target>
+    </transformer>
+    <logging>
+        <level>err</level>
+    </logging>
+    <transformations>
+        <template name="clean"/>
+    </transformations>
+    <files>
+        <directory>src/</directory>
+        <ignore>test/*</ignore>
+        <ignore>vendor/*</ignore>
+    </files>
+</phpdoc>

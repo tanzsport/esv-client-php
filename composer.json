@@ -1,0 +1,31 @@
+{
+	"name": "tanzsport/esv-api-client",
+	"description": "ESV API-Client Tanzsport Deutschland",
+	"minimum-stability": "stable",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Hendrik Heneke",
+			"email": "heneke@tanzsport.de"
+		}
+	],
+	"require": {
+		"php": ">= 5.4.0",
+		"guzzlehttp/guzzle": "~5.2.0",
+		"jms/serializer": "0.16.*",
+		"pimple/pimple": "~3.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.5.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Tanzsport\\ESV\\API\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-0": {
+			"": "test"
+		}
+	}
+}

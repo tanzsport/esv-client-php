@@ -1,0 +1,16 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="Unit Tests">
+        </testsuite>
+        <testsuite name="Integration Tests">
+            <file>test/Model/DeserializationTest.php</file>
+            <file>test/Resource/Starter/StarterResourceTest.php</file>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <blacklist>
+            <directory>test</directory>
+            <directory>vendor</directory>
+        </blacklist>
+    </filter>
+</phpunit>
