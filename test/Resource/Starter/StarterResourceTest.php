@@ -40,7 +40,7 @@ class StarterResourceTestCase extends AbstractTestCase
 		$paar = $this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\Konstanten::WA_EINZEL, 10059600);
 
 		$this->assertNotNull($paar);
-		$this->assertEquals(135088, $paar->id);
+		$this->assertNotNull($paar->id);
 
 		$this->assertNotNull($paar->partner);
 		$this->assertTrue($paar->partner->maennlich);
