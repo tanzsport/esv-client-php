@@ -22,12 +22,20 @@ class FunktionaerResource extends AbstractResource
 
 		$response = $this->doGet(sprintf(self::URL_ID, $id));
 		if ($response != null) {
-			return $this->deserializeFunktionaer($response->getBody());
+			return $this->deserializeResponse($response->getBody(), 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
 		}
 	}
 
-	private function deserializeFunktionaer($body)
+	public function findeAlleFunktionaere()
 	{
-		return $this->deserializeJson($body, 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
+		$response = $this->doGet(sprintf(self::URL_LIST));
+		if ($response != null) {
+			return $this->deserializeResponse($response->getBody(), 'array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>');
+		}
+	}
+
+	private function deserializeResponse($body, $type)
+	{
+		return $this->deserializeJson($body, $type);
 	}
 }

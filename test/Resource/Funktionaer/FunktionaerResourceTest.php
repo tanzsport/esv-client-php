@@ -22,4 +22,13 @@ class FunktionaerResourceTest extends AbstractTestCase
 		//$f = $this->resource->findeFunktionaerNachDtvId('DE100069436');
 		$this->markTestIncomplete('API ist noch nicht implementiert.');
 	}
+
+	/**
+	 * @test
+	 */
+	public function liste()
+	{
+		//$liste = $this->resource->findeAlleFunktionaere();
+		$this->markTestIncomplete('API ist noch nicht implementiert.');
+	}
 }

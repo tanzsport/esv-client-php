@@ -44,9 +44,20 @@ class DeserializationTest extends AbstractTestCase
 		$this->assertEquals("LTV", $f->club->ltv->name);
 		$this->assertEquals('GER', $f->staat);
 		$this->assertCount(3, $f->lizenzen);
-		foreach(array('TL', 'WR-A-Lat', 'WR-S-Std') as $l) {
+		foreach (array('TL', 'WR-A-Lat', 'WR-S-Std') as $l) {
 			$this->assertTrue(in_array($l, $f->lizenzen));
 		}
+	}
+
+	/**
+	 * @test
+	 */
+	public function funktionaere()
+	{
+		$liste = $this->deserialize('Funktionaere.json', 'array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>');
+		$this->assertNotNull($liste);
+		$this->assertCount(2, $liste);
+		$this->assertTrue(is_a($liste[0], 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer'));
 	}
 
 	/**
@@ -104,7 +115,9 @@ class DeserializationTest extends AbstractTestCase
 	{
 		$object = $this->client->getSerializer()->deserialize(file_get_contents(__DIR__ . '/' . $file), $type, 'json');
 		$this->assertNotNull($object);
-		$this->assertTrue(is_a($object, $type));
+		if (class_exists($type, false)) {
+			$this->assertTrue(is_a($object, $type));
+		}
 		return $object;
 	}
 }

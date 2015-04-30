@@ -1,0 +1,42 @@
+[
+  {
+    "id": "DE100001009",
+    "wdsfMin": 10099998,
+    "lizenzNr": 12344,
+    "titel": null,
+    "vorname": "Max",
+    "nachname": "Mustermann",
+    "club": {
+      "id": 1,
+      "name": "Verein A",
+      "ltv": {
+        "id": 1,
+        "name": "LTV 1"
+      }
+    },
+    "staat": "GER",
+    "lizenzen": [
+      "TL", "WR-A-Lat", "WR-S-Std"
+    ]
+  },
+  {
+    "id": "DE100001017",
+    "wdsfMin": 10099999,
+    "lizenzNr": 12345,
+    "titel": null,
+    "vorname": "Sabine",
+    "nachname": "Musterfrau",
+    "club": {
+      "id": 2,
+      "name": "Verein B",
+      "ltv": {
+        "id": 2,
+        "name": "LTV 2"
+      }
+    },
+    "staat": "GER",
+    "lizenzen": [
+      "TL", "WR-S-Lat", "WR-S-Std"
+    ]
+  }
+]
