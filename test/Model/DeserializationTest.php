@@ -27,6 +27,31 @@ class DeserializationTest extends AbstractTestCase
 	/**
 	 * @test
 	 */
+	public function funktionaer()
+	{
+		$f = $this->deserialize('Funktionaer.json', 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
+		$this->assertEquals('DE100092217', $f->id);
+		$this->assertEquals(10099999, $f->wdsfMin);
+		$this->assertEquals(12345, $f->lizenzNr);
+		$this->assertNull($f->titel);
+		$this->assertEquals('Max', $f->vorname);
+		$this->assertEquals('Mustermann', $f->nachname);
+		$this->assertNotNull($f->club);
+		$this->assertEquals(1, $f->club->id);
+		$this->assertEquals("Verein", $f->club->name);
+		$this->assertNotNull($f->club->ltv);
+		$this->assertEquals(1, $f->club->ltv->id);
+		$this->assertEquals("LTV", $f->club->ltv->name);
+		$this->assertEquals('GER', $f->staat);
+		$this->assertCount(3, $f->lizenzen);
+		foreach(array('TL', 'WR-A-Lat', 'WR-S-Std') as $l) {
+			$this->assertTrue(in_array($l, $f->lizenzen));
+		}
+	}
+
+	/**
+	 * @test
+	 */
 	public function person()
 	{
 		$person = $this->deserialize('Person.json', 'Tanzsport\ESV\API\Model\Person');

@@ -1,0 +1,20 @@
+{
+  "id": "DE100092217",
+  "wdsfMin": 10099999,
+  "lizenzNr": 12345,
+  "titel": null,
+  "vorname": "Max",
+  "nachname": "Mustermann",
+  "club": {
+    "id": 1,
+    "name": "Verein",
+    "ltv": {
+      "id": 1,
+      "name": "LTV"
+    }
+  },
+  "staat": "GER",
+  "lizenzen": [
+    "TL", "WR-A-Lat", "WR-S-Std"
+  ]
+}
