@@ -28,7 +28,7 @@ class StarterResourceTestCase extends AbstractTestCase
 	 */
 	public function findeStarterNachDtvId()
 	{
-		//$this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\ApiKonstanten::WA_EINZEL, "DE100092217");
+		//$this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\Konstanten::WA_EINZEL, "DE100092217");
 		$this->markTestIncomplete('API ist noch nicht implementiert.');
 	}
 
