@@ -12,7 +12,7 @@
 
 		composer require "tanzsport/esv-api-client" "dev-master"
 
-3. Die Einbindung in das eigene Projekt erfolgt über den Composer-Autloader:
+3. Die Einbindung in das eigene Projekt erfolgt über den Composer-Autoloader:
 
 		require_once 'vendor/autoload.php';
 
