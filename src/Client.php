@@ -6,6 +6,7 @@ use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use Pimple\Container;
 use Tanzsport\ESV\API\Http\HttpClient;
+use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
 
 /**
@@ -21,6 +22,7 @@ class Client
 	const BEAN_HTTPCLIENT = 'esvHttpClient';
 	const BEAN_SERIALIZER = 'serializer';
 	const BEAN_RESOURCE_STARTER = 'resourceStarter';
+	const BEAN_RESOURCE_FUNKTIONAER = 'resourceFunktionaer';
 
 	/**
 	 * @var Endpunkt
@@ -96,6 +98,10 @@ class Client
 		$this->bind(self::BEAN_RESOURCE_STARTER, function () {
 			return new StarterResource($this->getHttpClient(), $this->getSerializer());
 		});
+
+		$this->bind(self::BEAN_RESOURCE_FUNKTIONAER, function () {
+			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer());
+		});
 	}
 
 	private function bind($key, callable $callable)
@@ -106,6 +112,16 @@ class Client
 	private function get($key)
 	{
 		return $this->container->offsetGet($key);
+	}
+
+	/**
+	 * Gibt die Funktionär-Resource zurück.
+	 *
+	 * @return FunktionaerResource
+	 */
+	public function getFunktionaerResource()
+	{
+		return $this->get(self::BEAN_RESOURCE_FUNKTIONAER);
 	}
 
 	/**

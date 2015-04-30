@@ -4,6 +4,7 @@
         </testsuite>
         <testsuite name="Integration Tests">
             <file>test/Model/DeserializationTest.php</file>
+            <file>test/Resource/Funktionaer/FunktionaerResourceTest.php</file>
             <file>test/Resource/Starter/StarterResourceTest.php</file>
         </testsuite>
     </testsuites>
