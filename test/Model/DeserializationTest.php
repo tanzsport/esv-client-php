@@ -30,7 +30,7 @@ class DeserializationTest extends AbstractTestCase
 	public function funktionaer()
 	{
 		$f = $this->deserialize('Funktionaer.json', 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
-		$this->assertEquals('DE100092217', $f->id);
+		$this->assertEquals('DE100001050', $f->id);
 		$this->assertEquals(10099999, $f->wdsfMin);
 		$this->assertEquals(12345, $f->lizenzNr);
 		$this->assertNull($f->titel);
@@ -66,7 +66,7 @@ class DeserializationTest extends AbstractTestCase
 	public function person()
 	{
 		$person = $this->deserialize('Person.json', 'Tanzsport\ESV\API\Model\Person');
-		$this->assertEquals("DE100092217", $person->id);
+		$this->assertEquals("DE100001025", $person->id);
 		$this->assertEquals("Dr.", $person->titel);
 		$this->assertEquals("Vorname", $person->vorname);
 		$this->assertEquals("Nachname", $person->nachname);
@@ -84,7 +84,7 @@ class DeserializationTest extends AbstractTestCase
 		$this->assertEquals(1, $paar->id);
 
 		$this->assertNotNull($paar->partner);
-		$this->assertEquals("DE100092217", $paar->partner->id);
+		$this->assertEquals("DE100001033", $paar->partner->id);
 		$this->assertNull($paar->partner->titel);
 		$this->assertEquals("Vorname 1", $paar->partner->vorname);
 		$this->assertEquals("Nachname 1", $paar->partner->nachname);
@@ -93,7 +93,7 @@ class DeserializationTest extends AbstractTestCase
 		$this->assertEquals("GER", $paar->partner->nationalitaet);
 
 		$this->assertNotNull($paar->partnerin);
-		$this->assertEquals("DE100092152", $paar->partnerin->id);
+		$this->assertEquals("DE100001041", $paar->partnerin->id);
 		$this->assertNull($paar->partnerin->titel);
 		$this->assertEquals("Vorname 2", $paar->partnerin->vorname);
 		$this->assertEquals("Nachname 2", $paar->partnerin->nachname);
