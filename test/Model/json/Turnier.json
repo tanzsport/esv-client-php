@@ -1,0 +1,41 @@
+{
+  "id": 40434,
+  "datumVon": "2014-04-18T00:00:00+0200",
+  "datumBis": "2014-04-18T00:00:00+0200",
+  "startzeitPlan": "09:00",
+  "startzeitPlanKorrigiert": "09:10",
+  "titel": "XXL-Cup",
+  "veranstalter": {
+    "id": 1,
+    "name": "Deutscher Tanzsportverband e.V.",
+    "ltv": null
+  },
+  "ausrichter": {
+    "id": 8002,
+    "name": "OTK Schwarz-Wei\u00df 1922 im SCS Berlin e.V.",
+    "ltv": {
+      "id": 3,
+      "name": "LTVBerlin"
+    }
+  },
+  "flaechenId": "Fl. 1+2",
+  "wettbewerbsart": "Einzel",
+  "turnierform": "RLT",
+  "startgruppe": "Hgr",
+  "startklasseLiga": "S",
+  "turnierart": "Std",
+  "zulassung": [
+    "WDSF"
+  ],
+  "wanderpokal": true,
+  "turnierrang": 1,
+  "aufstiegsturnier": true,
+  "ranglistenId": "Hgr-Std",
+  "wdsfTurnierId": 4711,
+  "startgebuehr": "25 EUR",
+  "bemerkungen": "Bemerkungen Turnier",
+  "wertungsrichter": ["DE100002005", "DE100002013", "DE100020127"],
+  "turnierleiter": "DE100020135",
+  "beisitzer": "DE100020143",
+  "chairman": "DE100020151"
+}

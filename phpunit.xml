@@ -1,11 +1,12 @@
 <phpunit>
     <testsuites>
         <testsuite name="Unit Tests">
+            <file>test/Model/DeserializationTest.php</file>
         </testsuite>
         <testsuite name="Integration Tests">
-            <file>test/Model/DeserializationTest.php</file>
             <file>test/Resource/Funktionaer/FunktionaerResourceTest.php</file>
             <file>test/Resource/Starter/StarterResourceTest.php</file>
+            <file>test/Resource/Veranstaltung/VeranstaltungResourceTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

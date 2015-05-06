@@ -8,6 +8,7 @@ use Pimple\Container;
 use Tanzsport\ESV\API\Http\HttpClient;
 use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
+use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
 
 /**
  * Zentrale Klasse für den Zugriff auf die ESV-API. Benötigt einen Endpunkt, einen User-Agent, das ESV-Token, einen
@@ -23,6 +24,7 @@ class Client
 	const BEAN_SERIALIZER = 'serializer';
 	const BEAN_RESOURCE_STARTER = 'resourceStarter';
 	const BEAN_RESOURCE_FUNKTIONAER = 'resourceFunktionaer';
+	const BEAN_RESOURCE_VERANSTALTUNG = 'resourceVeranstaltung';
 
 	/**
 	 * @var Endpunkt
@@ -102,6 +104,10 @@ class Client
 		$this->bind(self::BEAN_RESOURCE_FUNKTIONAER, function () {
 			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer());
 		});
+
+		$this->bind(self::BEAN_RESOURCE_VERANSTALTUNG, function () {
+			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer());
+		});
 	}
 
 	private function bind($key, callable $callable)
@@ -152,5 +158,15 @@ class Client
 	public function getStarterResource()
 	{
 		return $this->get(self::BEAN_RESOURCE_STARTER);
+	}
+
+	/**
+	 * Gibt die Veranstaltung-Resource zurück.
+	 *
+	 * @return VeranstaltungResource
+	 */
+	public function getVeranstaltungResource()
+	{
+		return $this->get(self::BEAN_RESOURCE_VERANSTALTUNG);
 	}
 }

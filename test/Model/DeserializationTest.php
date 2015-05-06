@@ -52,10 +52,21 @@ class DeserializationTest extends AbstractTestCase
 	/**
 	 * @test
 	 */
+	public function flaeche()
+	{
+		$f = $this->deserialize('Flaeche.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Flaeche');
+		$this->assertEquals("Fläche 1", $f->id);
+		$this->assertEquals("Parkett", $f->typ);
+		$this->assertEquals(10.5, $f->laenge);
+		$this->assertEquals(8.5, $f->breite);
+	}
+
+	/**
+	 * @test
+	 */
 	public function funktionaere()
 	{
 		$liste = $this->deserialize('Funktionaere.json', 'array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>');
-		$this->assertNotNull($liste);
 		$this->assertCount(2, $liste);
 		$this->assertTrue(is_a($liste[0], 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer'));
 	}
@@ -111,9 +122,79 @@ class DeserializationTest extends AbstractTestCase
 		$this->assertEquals("GER", $paar->staat);
 	}
 
+	/**
+	 * @test
+	 */
+	public function turnier()
+	{
+		$t = $this->deserialize('Turnier.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Turnier');
+		$datum = new DateTime('2014-04-18');
+		$this->assertEquals(40434, $t->id);
+		$this->assertEquals($datum, $t->datumVon);
+		$this->assertEquals($datum, $t->datumBis);
+		$this->assertEquals("09:00", $t->startzeitPlan);
+		$this->assertEquals("09:10", $t->startzeitPlanKorrigiert);
+		$this->assertEquals("XXL-Cup", $t->titel);
+		$this->assertNotNull($t->veranstalter);
+		$this->assertEquals(1, $t->veranstalter->id);
+		$this->assertNotNull($t->ausrichter);
+		$this->assertEquals(8002, $t->ausrichter->id);
+		$this->assertEquals("Fl. 1+2", $t->flaechenId);
+		$this->assertEquals("Einzel", $t->wettbewerbsart);
+		$this->assertEquals("RLT", $t->turnierform);
+		$this->assertEquals("Hgr", $t->startgruppe);
+		$this->assertEquals("S", $t->startklasseLiga);
+		$this->assertEquals("Std", $t->turnierart);
+		$this->assertNotNull($t->zulassung);
+		$this->assertCount(1, $t->zulassung);
+		$this->assertContains('WDSF', $t->zulassung);
+		$this->assertTrue($t->wanderpokal);
+		$this->assertEquals(1, $t->turnierrang);
+		$this->assertTrue($t->aufstiegsturnier);
+		$this->assertEquals("Hgr-Std", $t->ranglistenId);
+		$this->assertEquals(4711, $t->wdsfTurnierId);
+		$this->assertEquals("25 EUR", $t->startgebuehr);
+		$this->assertEquals("Bemerkungen Turnier", $t->bemerkungen);
+		$this->assertNotNull($t->wertungsrichter);
+		$this->assertCount(3, $t->wertungsrichter);
+		foreach (array("DE100002005", "DE100002013", "DE100020127") as $id) {
+			$this->assertContains($id, $t->wertungsrichter);
+		}
+		$this->assertEquals("DE100020135", $t->turnierleiter);
+		$this->assertEquals("DE100020143", $t->beisitzer);
+		$this->assertEquals("DE100020151", $t->chairman);
+	}
+
+	/**
+	 * @test
+	 */
+	public function turnierstaette()
+	{
+		$t = $this->deserialize('Turnierstaette.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Turnierstaette');
+		$this->assertEquals("Vereinsheim", $t->name);
+		$this->assertEquals("Musterstr. 1", $t->anschrift);
+		$this->assertEquals("12345", $t->plz);
+		$this->assertEquals("Berlin", $t->ort);
+	}
+
+	/**
+	 * @test
+	 */
+	public function veranstaltung()
+	{
+		$v = $this->deserialize('Veranstaltung.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung');
+		$von = new DateTime('2014-04-18');
+		$bis = new DateTime('2014-04-21');
+		$this->assertEquals(2001, $v->id);
+		$this->assertEquals($von, $v->datumVon);
+		$this->assertEquals($bis, $v->datumBis);
+		$this->assertEquals('Berlin', $v->ort);
+		$this->assertEquals('Blaues Band der Spree', $v->titel);
+	}
+
 	private function deserialize($file, $type)
 	{
-		$object = $this->client->getSerializer()->deserialize(file_get_contents(__DIR__ . '/' . $file), $type, 'json');
+		$object = $this->client->getSerializer()->deserialize(file_get_contents(__DIR__ . '/json/' . $file), $type, 'json');
 		$this->assertNotNull($object);
 		if (class_exists($type, false)) {
 			$this->assertTrue(is_a($object, $type));
