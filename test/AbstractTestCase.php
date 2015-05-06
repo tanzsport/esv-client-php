@@ -20,6 +20,8 @@ abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
 			$this->setEnv($envFile);
 		}
 
+		date_default_timezone_set('Europe/Berlin');
+
 		$this->client = new \Tanzsport\ESV\API\Client(
 			new \Tanzsport\ESV\API\Endpunkt($this->getEnv('ESV_ENDPOINT')), 'PHPUnit', $this->getEnv('ESV_TOKEN'),
 			$this->getEnv('ESV_USER'), $this->getEnv('ESV_PASSWORD'), $this->isVerifySSL()
