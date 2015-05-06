@@ -8,7 +8,7 @@ use Tanzsport\ESV\API\Model\Club;
 use Tanzsport\ESV\API\Model\Person;
 
 /**
- * Abstrakte Basis-Klasse für Starter.
+ * Basis-Klasse für Starter.
  *
  * @package Tanzsport\ESV\API\Model\Starter
  * @property-read int $id ID des Starters
@@ -17,7 +17,7 @@ use Tanzsport\ESV\API\Model\Person;
  *
  * @ExclusionPolicy("all")
  */
-abstract class Starter
+class Starter
 {
 
 	/**

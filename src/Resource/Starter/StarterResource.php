@@ -20,10 +20,11 @@ class StarterResource extends AbstractResource
 	 * Sucht einen Starter anhand seiner ID; gibt null zurück, falls kein entsprechender Starter gefunden wird.
 	 *
 	 * @param int $id
+	 * @param string $type Objekttyp für Deserialisierung, standardmäßig Tanzsport\ESV\API\Model\Starter
 	 * @throws \InvalidArgumentException bei fehlenden Parametern oder nicht-numerischen IDs
 	 * @return Starter|null
 	 */
-	public function findeStarterNachId($id)
+	public function findeStarterNachId($id, $type = 'Tanzsport\ESV\API\Model\Starter')
 	{
 		if (!$id) {
 			throw new \InvalidArgumentException('ID erforderlich.');
@@ -31,9 +32,13 @@ class StarterResource extends AbstractResource
 		if (!is_numeric($id)) {
 			throw new \InvalidArgumentException('ID muss numerisch sein.');
 		}
+		if (!$type) {
+			throw new \InvalidArgumentException('Typ erforderlich.');
+		}
 
 		$response = $this->doGet(sprintf(self::URL_ID, $id));
 		if ($response != null) {
+			return $this->deserializeJson($response->getBody(), $type);
 		}
 	}
 
