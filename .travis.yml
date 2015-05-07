@@ -9,7 +9,7 @@ script: php vendor/bin/phpunit
 env:
   global:
   - ESV_VERIFY_SSL=1
-  - secure: K/sgZRtznaZpkDJFih2c0AZ1O6dDm9+5yEfzfMfkQtdbIFqvV6eNHKTyZvsFP+lGpIv/9qo7wlYbtP4FHQdWBWJg7WkRm3ikzJW7vue9hnu9pqNF56TrZBSQ/sbTLB8eshVo1pDWeUXR/Y/HSZxgjv/H8msYisWPBEG7Vcv8VcE=
+  - secure: B2ALC65nzeSgNLA6oxkIR9PBEwoq1hcoehHUzOPlMKLEHqZ/I2zEJB98cz5Hlaoy2uGNl9ruuXr8P+JQtHLqI0IaRT0oJGem6M+E8Y5zm54ezQNWbp/YAk+pG75JiyhWpY2TGqJvAa1k3w3mESWQf/V23M7bd2aFTpSng62GLbc=
   - secure: Bzy7BYq7M/F0uHQ8Q/NH10Gc1LVXiG9gpuPeepSOVJdnuA6ERXm2RTfSrPBHlduuunD4ElnD0wr2lfbzwt1v7+jszJNsredkcSJIHAqciAcn+W112s4IIbcZKXrTw8NGvUytqGSJyOmZevncJI9Y8S9HrL/KjfxX1mUs6IA6hu4=
   - secure: jgEOCcNjO8bn1/6tFX/3HGF45AoLiO8fpv2EiAEDM+sdjeEtGRKcAq+wlUvHJSIU3Aa3PtZLoA61e6hmJrBlEZK+cDq2RQKpMi50nPbxqAPPwyksq9R/091kvNCKflc8RjOTt9V88Hv3EXJ5au1IDuNJCq9H8oTw2LegduwoTMw=
   - secure: H9uUce4yPwTsiHPa3wAgXXR0d8+mM6frhhKPj/fsMDlR8pkA3HqXiInUauCoPlOp1JJnmEF2LP6jhDM+of0vSRBc8WXgtkDaq72CR+iMHszQmf+VxYesXJ3RHn6NvsFIVJuXRwpFnATYRlJZ+IfBZ8qUfU9twKKlgLc6Zg/YbEI=
