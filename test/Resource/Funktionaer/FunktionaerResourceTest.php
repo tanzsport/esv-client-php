@@ -19,8 +19,9 @@ class FunktionaerResourceTest extends AbstractTestCase
 	 */
 	public function einzelaufruf()
 	{
-		//$f = $this->resource->findeFunktionaerNachDtvId('DE100069436');
-		$this->markTestIncomplete('API ist noch nicht implementiert.');
+		$f = $this->resource->findeFunktionaerNachDtvId('DE100069436');
+		$this->assertNotNull($f);
+		$this->assertEquals('DE100069436', $f->id);
 	}
 
 	/**
@@ -28,7 +29,15 @@ class FunktionaerResourceTest extends AbstractTestCase
 	 */
 	public function liste()
 	{
-		//$liste = $this->resource->findeAlleFunktionaere();
-		$this->markTestIncomplete('API ist noch nicht implementiert.');
+		$liste = $this->resource->findeAlleFunktionaere();
+		$this->assertNotNull($liste);
+		if(count($liste) > 0) {
+			foreach($liste as $f) {
+				$this->assertTrue(is_a($f, 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer'));
+			}
+		}
+		else {
+			$this->markTestIncomplete('Keine Funktionäre geladen.');
+		}
 	}
 }
