@@ -1,9 +1,9 @@
 <phpunit>
     <testsuites>
-        <testsuite name="Unit Tests">
+        <testsuite name="Unit">
             <file>test/Model/DeserializationTest.php</file>
         </testsuite>
-        <testsuite name="Integration Tests">
+        <testsuite name="Integration">
             <file>test/Resource/Funktionaer/FunktionaerResourceTest.php</file>
             <file>test/Resource/Starter/StarterResourceTest.php</file>
             <file>test/Resource/Veranstaltung/VeranstaltungResourceTest.php</file>
