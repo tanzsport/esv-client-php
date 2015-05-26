@@ -54,13 +54,18 @@ class Client
 	/**
 	 * @var bool
 	 */
+	private $compress;
+
+	/**
+	 * @var bool
+	 */
 	private $verifySsl;
 	/**
 	 * @var \Pimple\Container
 	 */
 	private $container;
 
-	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $verifySsl = true)
+	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false, $verifySsl = true)
 	{
 		if (!$userAgent) {
 			throw new \InvalidArgumentException('User-Agent erforderlich.');
@@ -80,6 +85,7 @@ class Client
 		$this->token = $token;
 		$this->user = $user;
 		$this->password = $password;
+		$this->compress = $compress;
 		$this->verifySsl = $verifySsl;
 		$this->boot();
 	}
@@ -89,7 +95,7 @@ class Client
 		$this->container = new Container();
 
 		$this->bind(self::BEAN_HTTPCLIENT, function () {
-			return new HttpClient($this->endpunkt, $this->userAgent, $this->token, $this->user, $this->password, $this->verifySsl);
+			return new HttpClient($this->endpunkt, $this->userAgent, $this->token, $this->user, $this->password, $this->compress, $this->verifySsl);
 		});
 
 		$this->bind(self::BEAN_SERIALIZER, function () {

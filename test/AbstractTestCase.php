@@ -5,6 +5,7 @@ abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
 
 	const DEFAULT_ENV = '.env.json';
 	const ESV_VERIFY_SSL = 'ESV_VERIFY_SSL';
+	const ESV_COMPRESS_ENABLED = 'ESV_COMPRESS_ENABLED';
 
 	/**
 	 * @var \Tanzsport\ESV\API\Client
@@ -24,7 +25,7 @@ abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
 
 		$this->client = new \Tanzsport\ESV\API\Client(
 			new \Tanzsport\ESV\API\Endpunkt($this->getEnv('ESV_ENDPOINT')), 'PHPUnit', $this->getEnv('ESV_TOKEN'),
-			$this->getEnv('ESV_USER'), $this->getEnv('ESV_PASSWORD'), $this->isVerifySSL()
+			$this->getEnv('ESV_USER'), $this->getEnv('ESV_PASSWORD'), $this->isCompressEnabled(), $this->isVerifySSL()
 		);
 	}
 
@@ -37,7 +38,7 @@ abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
 	{
 		if (file_exists($envFile)) {
 			$objEnv = json_decode(file_get_contents($envFile));
-			$vars = array('ESV_ENDPOINT', 'ESV_TOKEN', 'ESV_USER', 'ESV_PASSWORD', self::ESV_VERIFY_SSL);
+			$vars = array('ESV_ENDPOINT', 'ESV_TOKEN', 'ESV_USER', 'ESV_PASSWORD', self::ESV_COMPRESS_ENABLED, self::ESV_VERIFY_SSL);
 			foreach ($vars as $var) {
 				if (isset($objEnv->$var)) {
 					$_SERVER[$var] = $objEnv->$var;
@@ -65,6 +66,18 @@ abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
 				return $_SERVER[self::ESV_VERIFY_SSL];
 			} else {
 				return $_SERVER[self::ESV_VERIFY_SSL] > 0;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	protected function isCompressEnabled() {
+		if (isset($_SERVER[self::ESV_COMPRESS_ENABLED])) {
+			if (is_bool($_SERVER[self::ESV_COMPRESS_ENABLED])) {
+				return $_SERVER[self::ESV_COMPRESS_ENABLED];
+			} else {
+				return $_SERVER[self::ESV_COMPRESS_ENABLED] > 0;
 			}
 		} else {
 			return true;
