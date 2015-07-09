@@ -10,7 +10,7 @@ class Endpunkt
 {
 
 	const Q1 = 'http://ev-q1.tanzsport-portal.de';
-	const Q2 = 'http://ev-e2.tanzsport-portal.de';
+	const Q2 = 'http://ev-q2.tanzsport-portal.de';
 	const PROD = 'https://ev.tanzsport-portal.de';
 
 	/**
