@@ -27,7 +27,6 @@ namespace Tanzsport\ESV\API;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
-use Pimple\Container;
 use Tanzsport\ESV\API\Http\HttpClient;
 use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
@@ -83,10 +82,16 @@ class Client
 	 * @var bool
 	 */
 	private $verifySsl;
+
 	/**
-	 * @var \Pimple\Container
+	 * @var array
 	 */
 	private $container;
+
+	/**
+	 * @var array
+	 */
+	private $cache;
 
 	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false, $verifySsl = true)
 	{
@@ -115,7 +120,7 @@ class Client
 
 	private function boot()
 	{
-		$this->container = new Container();
+		$this->container = [];
 
 		$this->bind(self::BEAN_HTTPCLIENT, function () {
 			return new HttpClient($this->endpunkt, $this->userAgent, $this->token, $this->user, $this->password, $this->compress, $this->verifySsl);
@@ -141,12 +146,21 @@ class Client
 
 	private function bind($key, callable $callable)
 	{
-		$this->container->offsetSet($key, $callable);
+		if (!$key) {
+			throw new \InvalidArgumentException('Key erforderlich!');
+		}
+		$this->container[$key] = $callable;
 	}
 
 	private function get($key)
 	{
-		return $this->container->offsetGet($key);
+		if (!$key) {
+			throw new \InvalidArgumentException('Key erforderlich!');
+		}
+		if (!isset($this->cache[$key])) {
+			$this->cache[$key] = call_user_func($this->container[$key]);
+		}
+		return $this->cache[$key];
 	}
 
 	/**
