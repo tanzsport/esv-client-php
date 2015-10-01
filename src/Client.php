@@ -42,11 +42,11 @@ use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
 class Client
 {
 
-	const BEAN_HTTPCLIENT = 'esvHttpClient';
-	const BEAN_SERIALIZER = 'serializer';
-	const BEAN_RESOURCE_STARTER = 'resourceStarter';
-	const BEAN_RESOURCE_FUNKTIONAER = 'resourceFunktionaer';
-	const BEAN_RESOURCE_VERANSTALTUNG = 'resourceVeranstaltung';
+	private static $SVC_HTTPCLIENT = 'esvHttpClient';
+	private static $SVC_SERIALIZER = 'serializer';
+	private static $SVC_RESOURCE_STARTER = 'resourceStarter';
+	private static $SVC_RESOURCE_FUNKTIONAER = 'resourceFunktionaer';
+	private static $SVC_RESOURCE_VERANSTALTUNG = 'resourceVeranstaltung';
 
 	/**
 	 * @var Endpunkt
@@ -122,24 +122,24 @@ class Client
 	{
 		$this->container = [];
 
-		$this->bind(self::BEAN_HTTPCLIENT, function () {
+		$this->bind(self::$SVC_HTTPCLIENT, function () {
 			return new HttpClient($this->endpunkt, $this->userAgent, $this->token, $this->user, $this->password, $this->compress, $this->verifySsl);
 		});
 
-		$this->bind(self::BEAN_SERIALIZER, function () {
+		$this->bind(self::$SVC_SERIALIZER, function () {
 			AnnotationRegistry::registerLoader('class_exists');
 			return SerializerBuilder::create()->build();
 		});
 
-		$this->bind(self::BEAN_RESOURCE_STARTER, function () {
+		$this->bind(self::$SVC_RESOURCE_STARTER, function () {
 			return new StarterResource($this->getHttpClient(), $this->getSerializer());
 		});
 
-		$this->bind(self::BEAN_RESOURCE_FUNKTIONAER, function () {
+		$this->bind(self::$SVC_RESOURCE_FUNKTIONAER, function () {
 			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer());
 		});
 
-		$this->bind(self::BEAN_RESOURCE_VERANSTALTUNG, function () {
+		$this->bind(self::$SVC_RESOURCE_VERANSTALTUNG, function () {
 			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer());
 		});
 	}
@@ -170,7 +170,7 @@ class Client
 	 */
 	public function getFunktionaerResource()
 	{
-		return $this->get(self::BEAN_RESOURCE_FUNKTIONAER);
+		return $this->get(self::$SVC_RESOURCE_FUNKTIONAER);
 	}
 
 	/**
@@ -180,7 +180,7 @@ class Client
 	 */
 	public function getHttpClient()
 	{
-		return $this->get(self::BEAN_HTTPCLIENT);
+		return $this->get(self::$SVC_HTTPCLIENT);
 	}
 
 	/**
@@ -190,7 +190,7 @@ class Client
 	 */
 	public function getSerializer()
 	{
-		return $this->get(self::BEAN_SERIALIZER);
+		return $this->get(self::$SVC_SERIALIZER);
 	}
 
 	/**
@@ -200,7 +200,7 @@ class Client
 	 */
 	public function getStarterResource()
 	{
-		return $this->get(self::BEAN_RESOURCE_STARTER);
+		return $this->get(self::$SVC_RESOURCE_STARTER);
 	}
 
 	/**
@@ -210,6 +210,6 @@ class Client
 	 */
 	public function getVeranstaltungResource()
 	{
-		return $this->get(self::BEAN_RESOURCE_VERANSTALTUNG);
+		return $this->get(self::$SVC_RESOURCE_VERANSTALTUNG);
 	}
 }
