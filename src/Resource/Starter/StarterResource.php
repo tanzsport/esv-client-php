@@ -61,7 +61,7 @@ class StarterResource extends AbstractResource
 
 		$response = $this->doGet(sprintf(self::URL_ID, $id));
 		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), $type);
+			return $this->deserializeJson($response, $type);
 		}
 	}
 
@@ -88,7 +88,7 @@ class StarterResource extends AbstractResource
 
 		$response = $this->doGet(sprintf(self::URL_DTV_OR_WDSF, $wettbewerbsart, $id));
 		if ($response != null) {
-			return $this->deserializeStarter($response->getBody(), Konstanten::WA_EINZEL);
+			return $this->deserializeStarter($response, Konstanten::WA_EINZEL);
 		}
 	}
 

@@ -2,6 +2,7 @@
     <testsuites>
         <testsuite name="Unit">
             <file>test/Model/DeserializationTest.php</file>
+            <file>test/Resource/Cache/ResourceCacheTest.php</file>
         </testsuite>
         <testsuite name="Integration">
             <file>test/Resource/Funktionaer/FunktionaerResourceTest.php</file>

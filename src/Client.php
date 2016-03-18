@@ -84,6 +84,16 @@ class Client
 	private $verifySsl;
 
 	/**
+	 * @var bool|string
+	 */
+	private $cacheDir;
+
+	/**
+	 * @var int
+	 */
+	private $cacheTime;
+
+	/**
 	 * @var array
 	 */
 	private $container;
@@ -93,7 +103,7 @@ class Client
 	 */
 	private $cache;
 
-	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false, $verifySsl = true)
+	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false, $verifySsl = true, $cacheDir = false, $cacheTime = 60 * 60)
 	{
 		if (!$userAgent) {
 			throw new \InvalidArgumentException('User-Agent erforderlich.');
@@ -115,6 +125,8 @@ class Client
 		$this->password = $password;
 		$this->compress = $compress;
 		$this->verifySsl = $verifySsl;
+		$this->cacheDir = $cacheDir;
+		$this->cacheTime = $cacheTime;
 		$this->boot();
 	}
 
@@ -132,15 +144,15 @@ class Client
 		});
 
 		$this->bind(self::$SVC_RESOURCE_STARTER, function () {
-			return new StarterResource($this->getHttpClient(), $this->getSerializer());
+			return new StarterResource($this->getHttpClient(), $this->getSerializer(), $this->cacheDir, $this->cacheTime);
 		});
 
 		$this->bind(self::$SVC_RESOURCE_FUNKTIONAER, function () {
-			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer());
+			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer(), $this->cacheDir, $this->cacheTime);
 		});
 
 		$this->bind(self::$SVC_RESOURCE_VERANSTALTUNG, function () {
-			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer());
+			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer(), $this->cacheDir, $this->cacheTime);
 		});
 	}
 
