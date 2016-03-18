@@ -48,13 +48,25 @@ abstract class AbstractResource
 	protected $serializer;
 
 	/**
+	 * @var bool|string
+	 */
+	protected $cacheDir;
+
+	/**
+	 * @var int
+	 */
+	protected $cacheTime;
+
+	/**
 	 * @param HttpClient $client
 	 * @param Serializer $serializer
 	 */
-	public function __construct(HttpClient $client, Serializer $serializer)
+	public function __construct(HttpClient $client, Serializer $serializer, $cacheDir, $cacheTime)
 	{
 		$this->client = $client;
 		$this->serializer = $serializer;
+		$this->cacheDir = $cacheDir;
+		$this->cacheTime = $cacheTime;
 	}
 
 	/**
@@ -69,14 +81,37 @@ abstract class AbstractResource
 		if (!$url) {
 			throw new \InvalidArgumentException('URL erforderlich!');
 		}
+
+		$cacheFile = rtrim($this->cacheDir, '/') . '/' . md5($url);
+		if ($this->cacheDir) {
+			if (file_exists($cacheFile)) {
+				if ((filemtime($cacheFile) + $this->cacheTime >= time())) {
+					return file_get_contents($cacheFile);
+				} else {
+					unlink($cacheFile);
+				}
+			}
+		}
+
 		try {
-			return $this->client->get($url);
+			$data = $this->client->get($url)->getBody();
 		} catch (ClientException $e) {
 			if ($e->getCode() == 404) {
-				return null;
+				$data = null;
+			} else {
+				throw $e;
 			}
-			throw $e;
 		}
+
+		if ($this->cacheDir) {
+			if (file_exists($cacheFile) && $data === null) {
+				unlink($cacheFile);
+			} else {
+				file_put_contents($cacheFile, $data);
+			}
+		}
+
+		return $data;
 	}
 
 	protected function deserializeJson($data, $type)

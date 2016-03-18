@@ -48,7 +48,7 @@ class VeranstaltungResource extends AbstractResource
 	{
 		$response = $this->doGet(self::URL_LIST);
 		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), 'array<Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung>');
+			return $this->deserializeJson($response, 'array<Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung>');
 		} else {
 			return array();
 		}
@@ -71,7 +71,7 @@ class VeranstaltungResource extends AbstractResource
 
 		$response = $this->doGet(sprintf(self::URL_ID, $id));
 		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), 'Tanzsport\ESV\API\Model\Veranstaltung\VeranstaltungMitTurnieren');
+			return $this->deserializeJson($response, 'Tanzsport\ESV\API\Model\Veranstaltung\VeranstaltungMitTurnieren');
 		}
 	}
 }

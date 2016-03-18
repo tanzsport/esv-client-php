@@ -52,7 +52,7 @@ class FunktionaerResource extends AbstractResource
 
 		$response = $this->doGet(sprintf(self::URL_ID, $id));
 		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
+			return $this->deserializeJson($response, 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
 		}
 	}
 
@@ -65,7 +65,7 @@ class FunktionaerResource extends AbstractResource
 	{
 		$response = $this->doGet(sprintf(self::URL_LIST));
 		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), 'array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>');
+			return $this->deserializeJson($response, 'array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>');
 		}
 	}
 }
