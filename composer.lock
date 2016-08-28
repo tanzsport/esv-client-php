@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "80d43028f1484315eeeaa9651087a1b3",
-    "content-hash": "0f34c86e296ade4943e64186c7380667",
+    "hash": "c4b744fd87958d12931e8226b9dd4fb1",
+    "content-hash": "ab331fd8016932a336d4a2ae77a02cf8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -185,33 +185,27 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "5.2.0",
+            "version": "5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "475b29ccd411f2fa8a408e64576418728c032cfa"
+                "reference": "70f1fa53b71c4647bf2762c09068a95f77e12fb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/475b29ccd411f2fa8a408e64576418728c032cfa",
-                "reference": "475b29ccd411f2fa8a408e64576418728c032cfa",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/70f1fa53b71c4647bf2762c09068a95f77e12fb8",
+                "reference": "70f1fa53b71c4647bf2762c09068a95f77e12fb8",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/ringphp": "~1.0",
+                "guzzlehttp/ringphp": "^1.1",
                 "php": ">=5.4.0"
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "~4.0",
-                "psr/log": "~1.0"
+                "phpunit/phpunit": "^4.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "GuzzleHttp\\": "src/"
@@ -239,7 +233,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2015-01-28 01:03:29"
+            "time": "2016-07-15 19:28:39"
         },
         {
             "name": "guzzlehttp/ringphp",
