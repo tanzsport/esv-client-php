@@ -47,8 +47,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
 		date_default_timezone_set('Europe/Berlin');
 
-		$this->client = new \Tanzsport\ESV\API\Client(
-			new \Tanzsport\ESV\API\Endpunkt($this->getEnv('ESV_ENDPOINT')), 'PHPUnit', $this->getEnv('ESV_TOKEN'),
+		$this->client = new Client(
+			new Endpunkt($this->getEnv('ESV_ENDPOINT')), 'PHPUnit', $this->getEnv('ESV_TOKEN'),
 			$this->getEnv('ESV_USER'), $this->getEnv('ESV_PASSWORD'), $this->isCompressEnabled(), $this->isVerifySSL()
 		);
 	}
@@ -74,12 +74,12 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 	protected function getEnv($var)
 	{
 		if (!$var) {
-			throw new InvalidArgumentException('Variable erforderlich!');
+			throw new \InvalidArgumentException('Variable erforderlich!');
 		}
 		if (isset($_SERVER[$var])) {
 			return $_SERVER[$var];
 		} else {
-			throw new RuntimeException("Umgebungsvariable {$var} ist nicht definiert.");
+			throw new \RuntimeException("Umgebungsvariable {$var} ist nicht definiert.");
 		}
 	}
 
@@ -96,7 +96,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 		}
 	}
 
-	protected function isCompressEnabled() {
+	protected function isCompressEnabled()
+	{
 		if (isset($_SERVER[self::ESV_COMPRESS_ENABLED])) {
 			if (is_bool($_SERVER[self::ESV_COMPRESS_ENABLED])) {
 				return $_SERVER[self::ESV_COMPRESS_ENABLED];
