@@ -22,6 +22,10 @@
  * THE SOFTWARE.
  */
 
+namespace Tanzsport\ESV\API\Resource\Funktionaer;
+
+use Tanzsport\ESV\API\AbstractTestCase;
+
 class FunktionaerResourceTest extends AbstractTestCase
 {
 

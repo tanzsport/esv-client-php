@@ -22,6 +22,10 @@
  * THE SOFTWARE.
  */
 
+namespace Tanzsport\ESV\API\Resource\Veranstaltung;
+
+use Tanzsport\ESV\API\AbstractTestCase;
+
 class VeranstaltungResourceTest extends AbstractTestCase
 {
 

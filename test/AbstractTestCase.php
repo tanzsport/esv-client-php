@@ -22,7 +22,9 @@
  * THE SOFTWARE.
  */
 
-abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
+namespace Tanzsport\ESV\API;
+
+abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
 
 	const DEFAULT_ENV = '.env.json';

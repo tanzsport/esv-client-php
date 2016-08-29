@@ -22,6 +22,10 @@
  * THE SOFTWARE.
  */
 
+namespace Tanzsport\ESV\API\Resource\Starter;
+
+use Tanzsport\ESV\API\AbstractTestCase;
+
 class StarterResourceTestCase extends AbstractTestCase
 {
 

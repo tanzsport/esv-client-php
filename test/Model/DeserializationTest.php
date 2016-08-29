@@ -22,6 +22,10 @@
  * THE SOFTWARE.
  */
 
+namespace Tanzsport\ESV\API\Model;
+
+use Tanzsport\ESV\API\AbstractTestCase;
+
 class DeserializationTest extends AbstractTestCase
 {
 
@@ -150,7 +154,7 @@ class DeserializationTest extends AbstractTestCase
 	public function turnier()
 	{
 		$t = $this->deserialize('Turnier.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Turnier');
-		$datum = new DateTime('2014-04-18');
+		$datum = new \DateTime('2014-04-18');
 		$this->assertEquals(40434, $t->id);
 		$this->assertEquals($datum, $t->datumVon);
 		$this->assertEquals($datum, $t->datumBis);
@@ -205,8 +209,8 @@ class DeserializationTest extends AbstractTestCase
 	public function veranstaltung()
 	{
 		$v = $this->deserialize('Veranstaltung.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung');
-		$von = new DateTime('2014-04-18');
-		$bis = new DateTime('2014-04-21');
+		$von = new \DateTime('2014-04-18');
+		$bis = new \DateTime('2014-04-21');
 		$this->assertEquals(2001, $v->id);
 		$this->assertEquals($von, $v->datumVon);
 		$this->assertEquals($bis, $v->datumBis);
