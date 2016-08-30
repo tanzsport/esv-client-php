@@ -26,6 +26,7 @@ namespace Tanzsport\ESV\API\Resource;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Tanzsport\ESV\API\Http\HttpClient;
 
@@ -44,15 +45,15 @@ abstract class AbstractResource
 	protected $client;
 
 	/**
-	 * @var Serializer
+	 * @var SerializerInterface
 	 */
 	protected $serializer;
 
 	/**
 	 * @param HttpClient $client
-	 * @param Serializer $serializer
+	 * @param SerializerInterface $serializer
 	 */
-	public function __construct(HttpClient $client, Serializer $serializer)
+	public function __construct(HttpClient $client, SerializerInterface $serializer)
 	{
 		$this->client = $client;
 		$this->serializer = $serializer;
