@@ -25,7 +25,8 @@
 namespace Tanzsport\ESV\API\Resource;
 
 use GuzzleHttp\Exception\ClientException;
-use JMS\Serializer\Serializer;
+use GuzzleHttp\Exception\ServerException;
+use Psr\Http\Message\ResponseInterface;
 use Tanzsport\ESV\API\Http\HttpClient;
 
 /**
@@ -59,9 +60,9 @@ abstract class AbstractResource
 
 	/**
 	 * @param string $url relative URL
-	 * @return \GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|\GuzzleHttp\Ring\Future\FutureInterface|null
-	 * @throws \Exception
-	 * @throws \GuzzleHttp\Exception\ClientException
+	 * @return ResponseInterface|null
+	 * @throws ClientException
+	 * @throws ServerException
 	 * @throws \InvalidArgumentException
 	 */
 	protected function doGet($url)

@@ -47,7 +47,6 @@ class HttpClient extends Client
 	 */
 	public function __construct(Endpunkt $endpoint, $userAgent, $token, $user, $password, $compress = false, $verify = true)
 	{
-		parent::__construct(['base_url' => $endpoint->getBaseUrl()]);
 		if (!$userAgent) {
 			throw new \InvalidArgumentException('User-Agent erforderlich.');
 		}
@@ -60,20 +59,16 @@ class HttpClient extends Client
 		if (!$password) {
 			throw new \InvalidArgumentException('Passwort erforderlich.');
 		}
-		$headers = ['User-Agent' => sprintf('%1$s; Token=%2$s', $userAgent, $token)];
-		if($compress) {
-			$headers['Accept-Encoding'] = 'gzip';
-		}
-		$this->setDefaultOption('headers', $headers);
-		$this->setDefaultOption('auth', [$user, $password]);
-		$this->setDefaultOption('verify', $verify);
-		if($compress) {
-			$this->setDefaultOption('decode_content', true);
-		}
-		else {
-			$this->setDefaultOption('decode_content', false);
-		}
+		parent::__construct([
+			'base_uri' => $endpoint->getBaseUrl(),
+			'verify' => $verify,
+			'decode_content' => $compress,
+			'auth' => [$user, $password],
+			'headers' => array_merge(
+				['User-Agent' => sprintf('%1$s; Token=%2$s', $userAgent, $token)],
+				$compress ? ['Accept-Encoding' => 'gzip'] : []
+			)
+		]);
 		$this->endpoint = $endpoint;
 	}
-
 }
