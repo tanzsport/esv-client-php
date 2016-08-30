@@ -25,8 +25,8 @@
 namespace Tanzsport\ESV\API;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializerInterface;
 use Tanzsport\ESV\API\Http\HttpClient;
 use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
@@ -186,7 +186,7 @@ class Client
 	/**
 	 * Gibt den Serializer für die Serialisierung/Deserialisierung von JSON-Daten zurück.
 	 *
-	 * @return Serializer
+	 * @return SerializerInterface
 	 */
 	public function getSerializer()
 	{
