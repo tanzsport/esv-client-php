@@ -91,7 +91,7 @@ class Client
 	/**
 	 * @var array
 	 */
-	private $cache;
+	private $serviceInstances;
 
 	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false, $verifySsl = true)
 	{
@@ -157,10 +157,10 @@ class Client
 		if (!$key) {
 			throw new \InvalidArgumentException('Key erforderlich!');
 		}
-		if (!isset($this->cache[$key])) {
-			$this->cache[$key] = call_user_func($this->container[$key]);
+		if (!isset($this->serviceInstances[$key])) {
+			$this->serviceInstances[$key] = call_user_func($this->container[$key]);
 		}
-		return $this->cache[$key];
+		return $this->serviceInstances[$key];
 	}
 
 	/**
