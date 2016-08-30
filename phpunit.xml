@@ -1,6 +1,8 @@
 <phpunit>
     <testsuites>
         <testsuite name="Unit">
+            <file>test/Cache/File/FileCacheItemTest.php</file>
+            <file>test/Cache/File/FileCacheItemPoolTest.php</file>
             <file>test/Model/DeserializationTest.php</file>
         </testsuite>
         <testsuite name="Integration">

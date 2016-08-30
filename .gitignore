@@ -1,3 +1,4 @@
+.cache/
 .env.json
 .idea
 .DS_Store
