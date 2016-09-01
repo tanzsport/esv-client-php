@@ -27,7 +27,7 @@ namespace Tanzsport\ESV\API;
 /**
  * API-Endpunkt.
  *
- * @package Tanzsport\ESV\Api
+ * @package Tanzsport\ESV\API
  */
 class Endpunkt
 {

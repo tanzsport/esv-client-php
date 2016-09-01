@@ -37,7 +37,7 @@ use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
  * Benutzernamen und ein Passwort. Nach Initialisierung des Containers können die einzelnen Resourcen
  * verwendet werden.
  *
- * @package Tanzsport\ESV\Api
+ * @package Tanzsport\ESV\API
  */
 class Client
 {
