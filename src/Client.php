@@ -25,9 +25,9 @@
 namespace Tanzsport\ESV\API;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use GuzzleHttp\Client as HttpClient;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
-use Tanzsport\ESV\API\Http\HttpClient;
 use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
 use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
@@ -123,7 +123,7 @@ class Client
 		$this->container = [];
 
 		$this->bind(self::$SVC_HTTPCLIENT, function () {
-			return new HttpClient($this->endpunkt, $this->userAgent, $this->token, $this->user, $this->password, $this->compress, $this->verifySsl);
+			return $this->createHttpClient();
 		});
 
 		$this->bind(self::$SVC_SERIALIZER, function () {
@@ -161,6 +161,20 @@ class Client
 			$this->serviceInstances[$key] = call_user_func($this->container[$key]);
 		}
 		return $this->serviceInstances[$key];
+	}
+
+	protected function createHttpClient()
+	{
+		return new HttpClient([
+			'base_uri' => $this->endpunkt->getBaseUrl(),
+			'verify' => $this->verifySsl,
+			'decode_content' => $this->compress,
+			'auth' => [$this->user, $this->password],
+			'headers' => array_merge(
+				['User-Agent' => sprintf('%1$s; Token=%2$s', $this->userAgent, $this->token)],
+				$this->compress ? ['Accept-Encoding' => 'gzip'] : []
+			)
+		]);
 	}
 
 	/**

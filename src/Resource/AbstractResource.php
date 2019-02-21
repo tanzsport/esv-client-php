@@ -24,11 +24,11 @@
 
 namespace Tanzsport\ESV\API\Resource;
 
+use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Tanzsport\ESV\API\Http\HttpClient;
 
 /**
  * Abstrakte Basis-Klasse für Resourcen. Benötigt einen HTTP-Client und einen
