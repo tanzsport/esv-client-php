@@ -77,7 +77,7 @@ abstract class AbstractResource
 	 * @throws ServerException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function getForEntity($url, $type, $default = null)
+	protected function getForEntity($url, $type, $default = null, $cacheUntilNextDay = false)
 	{
 		if (!$url) {
 			throw new \InvalidArgumentException('URL erforderlich!');
@@ -95,7 +95,11 @@ abstract class AbstractResource
 			$response = $this->client->get($url);
 			$entity = $this->deserializeJson($response->getBody(), $type, 'json') ?: $default;
 			if ($entity != null && $entity != $default) {
-				$this->cachingStrategy->cacheResponseEntity($url, $entity);
+				if ($cacheUntilNextDay) {
+					$this->cachingStrategy->cacheResponseEntityUntilNextDay($url, $entity);
+				} else {
+					$this->cachingStrategy->cacheResponseEntity($url, $entity);
+				}
 			}
 			return $entity;
 		} catch (ClientException $e) {

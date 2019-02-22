@@ -38,4 +38,9 @@ class NoCachingStrategy implements CachingStrategy
 	{
 		return;
 	}
+
+	function cacheResponseEntityUntilNextDay($url, $entity)
+	{
+		return;
+	}
 }

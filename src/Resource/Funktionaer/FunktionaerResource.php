@@ -62,6 +62,6 @@ class FunktionaerResource extends AbstractResource
 	 */
 	public function findeAlleFunktionaere()
 	{
-		return $this->getForEntity(sprintf(self::URL_LIST), $this->createTypedArrayDescriptor(Funktionaer::class), []);
+		return $this->getForEntity(sprintf(self::URL_LIST), $this->createTypedArrayDescriptor(Funktionaer::class), [], true);
 	}
 }

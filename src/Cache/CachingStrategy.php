@@ -32,4 +32,6 @@ interface CachingStrategy
 	function getCachedResponseEntity($url);
 
 	function cacheResponseEntity($url, $entity);
+
+	function cacheResponseEntityUntilNextDay($url, $entity);
 }

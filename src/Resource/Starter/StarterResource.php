@@ -50,7 +50,7 @@ class StarterResource extends AbstractResource
 	 * @throws \InvalidArgumentException bei fehlenden Parametern oder nicht-numerischen IDs
 	 * @return Starter|null
 	 */
-	public function findeStarterNachId($id, $type = 'Tanzsport\ESV\API\Model\Starter')
+	public function findeStarterNachId($id, $type = Starter::class)
 	{
 		if (!$id) {
 			throw new \InvalidArgumentException('ID erforderlich.');
