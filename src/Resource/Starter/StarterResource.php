@@ -27,6 +27,7 @@
 namespace Tanzsport\ESV\API\Resource\Starter;
 
 use Tanzsport\ESV\API\Konstanten;
+use Tanzsport\ESV\API\Model\Starter\Paar;
 use Tanzsport\ESV\API\Model\Starter\Starter;
 use Tanzsport\ESV\API\Resource\AbstractResource;
 
@@ -61,10 +62,7 @@ class StarterResource extends AbstractResource
 			throw new \InvalidArgumentException('Typ erforderlich.');
 		}
 
-		$response = $this->doGet(sprintf(self::URL_ID, $id));
-		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), $type);
-		}
+		return $this->getForEntity(sprintf(self::URL_ID, $id), $type);
 	}
 
 	/**
@@ -88,22 +86,15 @@ class StarterResource extends AbstractResource
 			throw new \InvalidArgumentException("Wettbewerbsart {$wettbewerbsart} wird nicht unterstützt.");
 		}
 
-		$response = $this->doGet(sprintf(self::URL_DTV_OR_WDSF, $wettbewerbsart, $id));
-		if ($response != null) {
-			return $this->deserializeStarter($response->getBody(), Konstanten::WA_EINZEL);
-		}
-	}
-
-	private function deserializeStarter($body, $wettbewerbsart)
-	{
-		if (!$body) {
-			return;
-		}
+		$type = null;
 		switch ($wettbewerbsart) {
 			case Konstanten::WA_EINZEL:
-				return $this->deserializeJson($body, 'Tanzsport\ESV\API\Model\Starter\Paar');
+				$type = Paar::class;
+				break;
 			default:
 				throw new \InvalidArgumentException("Die Wettbewerbsart {$wettbewerbsart} wird noch nicht unterstützt.");
 		}
+
+		return $this->getForEntity(sprintf(self::URL_DTV_OR_WDSF, $wettbewerbsart, $id), $type);
 	}
 }

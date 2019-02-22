@@ -48,12 +48,7 @@ class VeranstaltungResource extends AbstractResource
 	 */
 	public function getVeranstaltungen()
 	{
-		$response = $this->doGet(self::URL_LIST);
-		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), 'array<Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung>');
-		} else {
-			return array();
-		}
+		return $this->getForEntity(self::URL_LIST, $this->createTypedArrayDescriptor(Veranstaltung::class), []);
 	}
 
 	/**
@@ -71,9 +66,6 @@ class VeranstaltungResource extends AbstractResource
 			throw new \InvalidArgumentException('ID muss numerisch sein.');
 		}
 
-		$response = $this->doGet(sprintf(self::URL_ID, $id));
-		if ($response != null) {
-			return $this->deserializeJson($response->getBody(), 'Tanzsport\ESV\API\Model\Veranstaltung\VeranstaltungMitTurnieren');
-		}
+		return $this->getForEntity(sprintf(self::URL_ID, $id), VeranstaltungMitTurnieren::class);
 	}
 }

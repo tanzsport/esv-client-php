@@ -24,44 +24,12 @@
  * THE SOFTWARE.
  */
 
-namespace Tanzsport\ESV\API\Resource\Funktionaer;
+namespace Tanzsport\ESV\API\Cache;
 
-use Tanzsport\ESV\API\Model\Funktionaer\Funktionaer;
-use Tanzsport\ESV\API\Resource\AbstractResource;
-
-/**
- * Resource zur Abfrage von Funktionären.
- *
- * @package Tanzsport\ESV\API\Resource\Funktionaer
- */
-class FunktionaerResource extends AbstractResource
+interface CachingStrategy
 {
 
-	const URL_ID = 'api/v1/funktionaer/%1$s';
-	const URL_LIST = 'api/v1/funktionaere';
+	function getCachedResponseEntity($url);
 
-	/**
-	 * Sucht einen Funktionär anhand seiner DTV-ID; gibt null zurück, falls kein entsprechender Funktionär gefunden wird.
-	 *
-	 * @param $id DTV-ID des Funktionärs
-	 * @return Funktionaer|null
-	 */
-	public function findeFunktionaerNachDtvId($id)
-	{
-		if (!$id) {
-			throw new \InvalidArgumentException('DTV-ID erforderlich!');
-		}
-
-		return $this->getForEntity(sprintf(self::URL_ID, $id), Funktionaer::class);
-	}
-
-	/**
-	 * Lädt die Gesamtliste aller Funktionäre (aus Datenschutzgründen ohne Titel und Vor- sowie Nachnamen).
-	 *
-	 * @return Funktionaer[]
-	 */
-	public function findeAlleFunktionaere()
-	{
-		return $this->getForEntity(sprintf(self::URL_LIST), $this->createTypedArrayDescriptor(Funktionaer::class), []);
-	}
+	function cacheResponseEntity($url, $entity);
 }

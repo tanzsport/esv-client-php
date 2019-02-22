@@ -31,6 +31,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Tanzsport\ESV\API\Cache\CachingStrategy;
 
 /**
  * Abstrakte Basis-Klasse für Resourcen. Benötigt einen HTTP-Client und einen
@@ -52,29 +53,51 @@ abstract class AbstractResource
 	protected $serializer;
 
 	/**
+	 * @var CachingStrategy
+	 */
+	protected $cachingStrategy;
+
+	/**
 	 * @param HttpClient $client
 	 * @param SerializerInterface $serializer
 	 */
-	public function __construct(HttpClient $client, SerializerInterface $serializer)
+	public function __construct(HttpClient $client, SerializerInterface $serializer, CachingStrategy $cachingStrategy)
 	{
 		$this->client = $client;
 		$this->serializer = $serializer;
+		$this->cachingStrategy = $cachingStrategy;
 	}
 
 	/**
 	 * @param string $url relative URL
-	 * @return ResponseInterface|null
+	 * @param string $type Typ-Deklaration
+	 * @param mixed $default Standard-Wert, wenn der API-Aufruf keinen Wert zurückgibt
+	 * @return mixed
 	 * @throws ClientException
 	 * @throws ServerException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function doGet($url)
+	protected function getForEntity($url, $type, $default = null)
 	{
 		if (!$url) {
 			throw new \InvalidArgumentException('URL erforderlich!');
 		}
+		if (!$type) {
+			throw new \InvalidArgumentException('Typ erforderlich!');
+		}
+
+		$cached = $this->cachingStrategy->getCachedResponseEntity($url);
+		if ($cached != null) {
+			return $cached;
+		}
+
 		try {
-			return $this->client->get($url);
+			$response = $this->client->get($url);
+			$entity = $this->deserializeJson($response->getBody(), $type, 'json') ?: $default;
+			if ($entity != null && $entity != $default) {
+				$this->cachingStrategy->cacheResponseEntity($url, $entity);
+			}
+			return $entity;
 		} catch (ClientException $e) {
 			if ($e->getCode() == 404) {
 				return null;
@@ -83,7 +106,12 @@ abstract class AbstractResource
 		}
 	}
 
-	protected function deserializeJson($data, $type)
+	protected function createTypedArrayDescriptor($type)
+	{
+		return sprintf('array<%1$s>', $type);
+	}
+
+	private function deserializeJson($data, $type)
 	{
 		return $this->serializer->deserialize($data, $type, 'json');
 	}
