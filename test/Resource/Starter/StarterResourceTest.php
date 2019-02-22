@@ -24,10 +24,14 @@
 
 namespace Tanzsport\ESV\API\Resource\Starter;
 
+use GuzzleHttp\Psr7\Response;
 use Tanzsport\ESV\API\AbstractTestCase;
+use Tanzsport\ESV\API\ReadsFile;
 
 class StarterResourceTestCase extends AbstractTestCase
 {
+
+	use ReadsFile;
 
 	/**
 	 * @var \Tanzsport\ESV\API\Resource\Starter\StarterResource
@@ -54,8 +58,12 @@ class StarterResourceTestCase extends AbstractTestCase
 	 */
 	public function findeStarterNachDtvId()
 	{
-		$starter = $this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\Konstanten::WA_EINZEL, "DE100092217");
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/empty-object.json'))
+		);
+		$starter = $this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\Konstanten::WA_EINZEL, "DE100001050");
 		$this->assertNotNull($starter);
+		$this->assertCount(0, $this->client->getMockHandler());
 	}
 
 	/**
@@ -63,24 +71,12 @@ class StarterResourceTestCase extends AbstractTestCase
 	 */
 	public function findeStarterNachWdsfId()
 	{
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/empty-object.json'))
+		);
 		$paar = $this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\Konstanten::WA_EINZEL, 10059600);
-
 		$this->assertNotNull($paar);
-		$this->assertNotNull($paar->id);
-
-		$this->assertNotNull($paar->partner);
-		$this->assertTrue($paar->partner->maennlich);
-		$this->assertEquals("DE100092217", $paar->partner->id);
-		$this->assertNotNull($paar->partner->vorname);
-		$this->assertNotNull($paar->partner->nachname);
-		$this->assertEquals(10059600, $paar->partner->wdsfMin);
-
-		$this->assertNotNull($paar->partnerin);
-		$this->assertFalse($paar->partnerin->maennlich);
-		$this->assertEquals("DE100092152", $paar->partnerin->id);
-		$this->assertNotNull($paar->partnerin->vorname);
-		$this->assertNotNull($paar->partnerin->nachname);
-		$this->assertEquals(10061867, $paar->partnerin->wdsfMin);
+		$this->assertCount(0, $this->client->getMockHandler());
 	}
 
 	/**
@@ -88,6 +84,10 @@ class StarterResourceTestCase extends AbstractTestCase
 	 */
 	public function findeStarterNachWdsfId_NotFound()
 	{
+		$this->client->getMockHandler()->append(
+			new Response(404, [])
+		);
 		$this->assertNull($this->resource->findeStarterNachDtvOderWdsfId(\Tanzsport\ESV\API\Konstanten::WA_EINZEL, 1));
+		$this->assertCount(0, $this->client->getMockHandler());
 	}
 }

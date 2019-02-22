@@ -24,10 +24,14 @@
 
 namespace Tanzsport\ESV\API\Resource\Funktionaer;
 
+use GuzzleHttp\Psr7\Response;
 use Tanzsport\ESV\API\AbstractTestCase;
+use Tanzsport\ESV\API\ReadsFile;
 
 class FunktionaerResourceTest extends AbstractTestCase
 {
+
+	use ReadsFile;
 
 	/**
 	 * @var \Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource
@@ -45,9 +49,13 @@ class FunktionaerResourceTest extends AbstractTestCase
 	 */
 	public function einzelaufruf()
 	{
-		$f = $this->resource->findeFunktionaerNachDtvId('DE100069436');
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/einzelaufruf.json'))
+		);
+		$f = $this->resource->findeFunktionaerNachDtvId('DE100001050');
 		$this->assertNotNull($f);
-		$this->assertEquals('DE100069436', $f->id);
+		$this->assertEquals('DE100001050', $f->id);
+		$this->assertCount(0, $this->client->getMockHandler());
 	}
 
 	/**
@@ -55,15 +63,15 @@ class FunktionaerResourceTest extends AbstractTestCase
 	 */
 	public function liste()
 	{
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/liste.json'))
+		);
 		$liste = $this->resource->findeAlleFunktionaere();
 		$this->assertNotNull($liste);
-		if(count($liste) > 0) {
-			foreach($liste as $f) {
-				$this->assertTrue(is_a($f, 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer'));
-			}
-		}
-		else {
-			$this->markTestIncomplete('Keine Funktionäre geladen.');
+		$this->assertCount(2, $liste);
+		$this->assertCount(0, $this->client->getMockHandler());
+		foreach ($liste as $f) {
+			$this->assertTrue(is_a($f, 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer'));
 		}
 	}
 }

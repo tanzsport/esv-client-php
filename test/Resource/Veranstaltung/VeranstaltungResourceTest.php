@@ -24,10 +24,14 @@
 
 namespace Tanzsport\ESV\API\Resource\Veranstaltung;
 
+use GuzzleHttp\Psr7\Response;
 use Tanzsport\ESV\API\AbstractTestCase;
+use Tanzsport\ESV\API\ReadsFile;
 
 class VeranstaltungResourceTest extends AbstractTestCase
 {
+
+	use ReadsFile;
 
 	/**
 	 * @var \Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource
@@ -45,15 +49,16 @@ class VeranstaltungResourceTest extends AbstractTestCase
 	 */
 	public function liste()
 	{
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/liste.json'))
+		);
 		$liste = $this->resource->getVeranstaltungen();
 		$this->assertNotNull($liste);
-		if (count($liste) > 0) {
-			foreach ($liste as $v) {
-				$this->assertTrue(is_a($v, 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung'));
-			}
-		} else {
-			$this->markTestIncomplete('Veranstaltungsliste enthält keine Elemente.');
+		$this->assertCount(2, $liste);
+		foreach ($liste as $v) {
+			$this->assertTrue(is_a($v, 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung'));
 		}
+		$this->assertCount(0, $this->client->getMockHandler());
 	}
 
 	/**
@@ -61,17 +66,11 @@ class VeranstaltungResourceTest extends AbstractTestCase
 	 */
 	public function id()
 	{
-		$liste = $this->resource->getVeranstaltungen();
-		$this->assertNotNull($liste);
-		if (count($liste) > 0) {
-			$id = $liste[0]->id;
-			$v = $this->resource->getVeranstaltungById($id);
-			$this->assertNotNull($v);
-			$this->assertEquals($id, $v->id);
-			$this->assertNotNull($v->veranstalter);
-			$this->assertNotNull($v->ausrichter);
-		} else {
-			$this->markTestIncomplete('Veranstaltungsliste enthält keine Elemente.');
-		}
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/einzelaufruf.json'))
+		);
+		$v = $this->resource->getVeranstaltungById(1);
+		$this->assertNotNull($v);
+		$this->assertCount(0, $this->client->getMockHandler());
 	}
 }

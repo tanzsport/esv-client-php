@@ -32,7 +32,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 	const ESV_COMPRESS_ENABLED = 'ESV_COMPRESS_ENABLED';
 
 	/**
-	 * @var \Tanzsport\ESV\API\Client
+	 * @var \Tanzsport\ESV\API\MockClient
 	 */
 	protected $client;
 
@@ -47,7 +47,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
 		date_default_timezone_set('Europe/Berlin');
 
-		$this->client = new Client(
+		$this->client = new MockClient(
 			new Endpunkt($this->getEnv('ESV_ENDPOINT')), 'PHPUnit', $this->getEnv('ESV_TOKEN'),
 			$this->getEnv('ESV_USER'), $this->getEnv('ESV_PASSWORD'), $this->isCompressEnabled(), $this->isVerifySSL()
 		);
