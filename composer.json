@@ -28,5 +28,10 @@
 		"psr-4": {
 			"Tanzsport\\ESV\\API\\": "test"
 		}
+	},
+	"scripts": {
+		"prepare-source": [
+			"licenser run src mit --replace-existing --owners \"Deutscher Tanzsportverband e.V.\""
+		]
 	}
 }
