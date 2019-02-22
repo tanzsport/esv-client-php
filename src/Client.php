@@ -95,7 +95,13 @@ class Client
 	 */
 	private $serviceInstances;
 
-	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false, $verifySsl = true)
+	/**
+	 * @var SerializerInterface
+	 */
+	private $externalSerializer;
+
+	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false,
+		$verifySsl = true, SerializerInterface $serializer = null)
 	{
 		if (!$userAgent) {
 			throw new \InvalidArgumentException('User-Agent erforderlich.');
@@ -117,6 +123,8 @@ class Client
 		$this->password = $password;
 		$this->compress = $compress;
 		$this->verifySsl = $verifySsl;
+
+		$this->externalSerializer = $serializer;
 		$this->boot();
 	}
 
@@ -129,8 +137,7 @@ class Client
 		});
 
 		$this->bind(self::$SVC_SERIALIZER, function () {
-			AnnotationRegistry::registerLoader('class_exists');
-			return SerializerBuilder::create()->build();
+			return $this->createSerializer();
 		});
 
 		$this->bind(self::$SVC_RESOURCE_STARTER, function () {
@@ -177,6 +184,16 @@ class Client
 				$this->compress ? ['Accept-Encoding' => 'gzip'] : []
 			)
 		]);
+	}
+
+	protected function createSerializer()
+	{
+		if ($this->externalSerializer != null) {
+			return $this->externalSerializer;
+		} else {
+			AnnotationRegistry::registerLoader('class_exists');
+			return SerializerBuilder::create()->build();
+		}
 	}
 
 	/**
