@@ -47,15 +47,6 @@ class StarterResourceTestCase extends AbstractTestCase
 	/**
 	 * @test
 	 */
-	public function findeStarterNachId()
-	{
-		//$this->resource->findeStarterNachId(135088);
-		$this->markTestIncomplete('API ist noch nicht implementiert.');
-	}
-
-	/**
-	 * @test
-	 */
 	public function findeStarterNachDtvId()
 	{
 		$this->client->getMockHandler()->append(
