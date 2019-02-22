@@ -13,10 +13,3 @@ matrix:
     - php: nightly
 install: composer install
 script: php vendor/bin/phpunit
-env:
-  global:
-  - ESV_VERIFY_SSL=1
-  - secure: SEFzaXPmzOtbewXvlPIpVjFZxxYWpoWOdNBXvPcNtIc269zn71GHpgbDmzGlSg3Sq46+4FZMVNCJduv5q5mVPSyXwjXlYCO5wAC7MRqhaKhkYRj+nQ9DsxFHE4Us9S//SaUJjXvhVLNOfX6QcHmxCMzT00nL4QtbJQcDE1Lvh4Q=
-  - secure: YON8n5gvRxpL2XNIecj2DRVrIlnBKiBuBa3Gm/jD9LJvWx/G8FNw7EE4jI8cyEeyleuxRQDYuxV2jqxiNdJ05lOOG0K1tBAZnKhnJVXqJCL3+JScceCIMecvLi3F09XrEpsUX0Umyygl7dVoLW6igdyfS5auyhDOY3PvPDmbMYM=
-  - secure: ePRaSrl0hrtqBB45k9/SAyrWdY6puEkJC+JdH56WbEYj2Fb6L6f4fZYjOTv8cmqVRg9K/nTKoxBEB0e8iDjeICHcHACHN4GZ8FIkxKe1jUdaVK7JYYsS/7HZb0f0QgfrA3gVHIuzwnOA6zXsfkOYlHr+IlC8bMBG+0R5ldi8lUE=
-  - secure: iXHtSEipJPrDHg4b+q9U9Z8oP3drMuaQiA8mX44an0ErmO+yHZiOcqOiDhjuuLVtMMqWLH3LQq2VBkceRsBLryIu0ghBzs6tOPgboMV7xcupkS0L0ksgP9cJrsdqvgMQljCDVsTZkPSGI3C2mCo/GhAUrhBwBsp4xbyCW09mjRU=
