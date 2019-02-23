@@ -15,7 +15,12 @@ class ClockSpec
 	 */
 	private $minute;
 
-	public function __construct($hour, $minute)
+	/**
+	 * @var \DateTimeZone
+	 */
+	private $timeZone;
+
+	public function __construct($hour, $minute, \DateTimeZone $timeZone = null)
 	{
 		if ($hour === null) {
 			throw new \InvalidArgumentException('Stunde erforderlich!');
@@ -35,18 +40,61 @@ class ClockSpec
 
 		$this->hour = $hour;
 		$this->minute = $minute;
+		$this->timeZone = $timeZone ?: new \DateTimeZone(date_default_timezone_get());
 	}
 
 	/**
-	 * @param \DateTimeInterface|null $from
+	 * @param \DateTimeInterface|null $now
 	 * @return \DateInterval
 	 * @throws \Exception
 	 */
-	public function caculateIntervalFrom(\DateTimeInterface $from = null)
+	public function caculateIntervalToExpiry(\DateTimeInterface $now = null)
 	{
-		$from = $from ? \DateTimeImmutable::createFromMutable($from) : new \DateTimeImmutable();
-		$to = $from->add(new \DateInterval('P1D'))->setTime($this->hour, $this->minute);
+		$now = $now ? $this->createImmutable($now) : $this->now();
 
-		return $from->diff($to);
+		if ($this->hasPassed($now)) {
+			$to = $now->add(new \DateInterval('P1D'))->setTime($this->hour, $this->minute, 0);
+		} else {
+			$to = $now->setTime($this->hour, $this->minute, 0);
+		}
+
+		return $now->diff($to);
+	}
+
+	/**
+	 * @param \DateTimeInterface|null $now
+	 * @return bool
+	 */
+	public function hasPassed(\DateTimeInterface $now = null)
+	{
+		$now = $now ? $this->createImmutable($now) : $this->now();
+
+		$minutesDifference = $this->minute - intval($now->format('i'));
+		if ($minutesDifference < 0) {
+			$minutesPassed = true;
+		} else if ($minutesDifference == 0) {
+			$minutesPassed = intval($now->format('s')) > 0;
+		} else {
+			$minutesPassed = false;
+		}
+
+		$hoursDifference = $this->hour - intval($now->format('G'));
+		if ($hoursDifference < 0) {
+			return true;
+		} else if ($hoursDifference == 0) {
+			return $minutesPassed;
+		} else {
+			return false;
+		}
+	}
+
+	private function createImmutable(\DateTimeInterface $input)
+	{
+		return \DateTimeImmutable::createFromMutable($input)->setTimezone($this->timeZone);
+	}
+
+	private function now()
+	{
+		return (new \DateTime('now'))->setTimezone($this->timeZone);
 	}
 }
