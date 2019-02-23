@@ -1,17 +1,19 @@
 <?php
 
 /*
- * Copyright (c) 2015 Deutscher Tanzsportverband e.V.
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2019 Deutscher Tanzsportverband e.V.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is furnished
- * to do so, subject to the following conditions:
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,6 +27,12 @@
 namespace Tanzsport\ESV\API\Model;
 
 use Tanzsport\ESV\API\AbstractTestCase;
+use Tanzsport\ESV\API\Model\Funktionaer\Funktionaer;
+use Tanzsport\ESV\API\Model\Starter\Paar;
+use Tanzsport\ESV\API\Model\Veranstaltung\Flaeche;
+use Tanzsport\ESV\API\Model\Veranstaltung\Turnier;
+use Tanzsport\ESV\API\Model\Veranstaltung\Turnierstaette;
+use Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung;
 
 class DeserializationTest extends AbstractTestCase
 {
@@ -47,7 +55,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function club()
 	{
-		$club = $this->deserialize('Club.json', 'Tanzsport\ESV\API\Model\Club');
+		$club = $this->deserialize('Club.json', Club::class);
 		$this->assertEquals(1, $club->id);
 		$this->assertEquals("Verein", $club->name);
 		$this->assertNotNull($club->ltv);
@@ -58,7 +66,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function ltv()
 	{
-		$ltv = $this->deserialize('LTV.json', 'Tanzsport\ESV\API\Model\LTV');
+		$ltv = $this->deserialize('LTV.json', LTV::class);
 		$this->assertEquals(1, $ltv->id);
 		$this->assertEquals('LTV', $ltv->name);
 	}
@@ -68,7 +76,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function funktionaer()
 	{
-		$f = $this->deserialize('Funktionaer.json', 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer');
+		$f = $this->deserialize('Funktionaer.json', Funktionaer::class);
 		$this->assertEquals('DE100001050', $f->id);
 		$this->assertEquals(10099999, $f->wdsfMin);
 		$this->assertEquals(12345, $f->lizenzNr);
@@ -93,7 +101,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function flaeche()
 	{
-		$f = $this->deserialize('Flaeche.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Flaeche');
+		$f = $this->deserialize('Flaeche.json', Flaeche::class);
 		$this->assertEquals("Fläche 1", $f->id);
 		$this->assertEquals("Parkett", $f->typ);
 		$this->assertEquals(10.5, $f->laenge);
@@ -105,9 +113,9 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function funktionaere()
 	{
-		$liste = $this->deserialize('Funktionaere.json', 'array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>');
+		$liste = $this->deserialize('Funktionaere.json', sprintf('array<%1$s>', Funktionaer::class));
 		$this->assertCount(2, $liste);
-		$this->assertTrue(is_a($liste[0], 'Tanzsport\ESV\API\Model\Funktionaer\Funktionaer'));
+		$this->assertTrue(is_a($liste[0], Funktionaer::class));
 	}
 
 	/**
@@ -115,7 +123,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function person()
 	{
-		$person = $this->deserialize('Person.json', 'Tanzsport\ESV\API\Model\Person');
+		$person = $this->deserialize('Person.json', Person::class);
 		$this->assertEquals("DE100001025", $person->id);
 		$this->assertEquals("Dr.", $person->titel);
 		$this->assertEquals("Vorname", $person->vorname);
@@ -130,7 +138,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function paar()
 	{
-		$paar = $this->deserialize('Paar.json', 'Tanzsport\ESV\API\Model\Starter\Paar');
+		$paar = $this->deserialize('Paar.json', Paar::class);
 		$this->assertEquals(1, $paar->id);
 
 		$this->assertNotNull($paar->partner);
@@ -166,7 +174,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function turnier()
 	{
-		$t = $this->deserialize('Turnier.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Turnier');
+		$t = $this->deserialize('Turnier.json', Turnier::class);
 		$datum = new \DateTime('2014-04-18');
 		$this->assertEquals(40434, $t->id);
 		$this->assertEquals($datum, $t->datumVon);
@@ -209,7 +217,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function turnierstaette()
 	{
-		$t = $this->deserialize('Turnierstaette.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Turnierstaette');
+		$t = $this->deserialize('Turnierstaette.json', Turnierstaette::class);
 		$this->assertEquals("Vereinsheim", $t->name);
 		$this->assertEquals("Musterstr. 1", $t->anschrift);
 		$this->assertEquals("12345", $t->plz);
@@ -221,7 +229,7 @@ class DeserializationTest extends AbstractTestCase
 	 */
 	public function veranstaltung()
 	{
-		$v = $this->deserialize('Veranstaltung.json', 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung');
+		$v = $this->deserialize('Veranstaltung.json', Veranstaltung::class);
 		$von = new \DateTime('2014-04-18');
 		$bis = new \DateTime('2014-04-21');
 		$this->assertEquals(2001, $v->id);

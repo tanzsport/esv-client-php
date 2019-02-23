@@ -31,7 +31,8 @@
 	},
 	"scripts": {
 		"prepare-source": [
-			"licenser run src mit --replace-existing --owners \"Deutscher Tanzsportverband e.V.\""
+			"licenser run src mit --replace-existing --owners \"Deutscher Tanzsportverband e.V.\"",
+			"licenser run test mit --replace-existing --owners \"Deutscher Tanzsportverband e.V.\""
 		]
 	}
 }
