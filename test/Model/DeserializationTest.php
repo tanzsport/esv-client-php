@@ -30,6 +30,19 @@ class DeserializationTest extends AbstractTestCase
 {
 
 	/**
+	 * @var \Tanzsport\ESV\API\MockClient
+	 */
+	private $client;
+
+	/**
+	 * @before
+	 */
+	public function before()
+	{
+		$this->client = $this->createClient();
+	}
+
+	/**
 	 * @test
 	 */
 	public function club()

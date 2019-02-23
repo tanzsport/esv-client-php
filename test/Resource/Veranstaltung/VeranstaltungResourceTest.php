@@ -34,13 +34,21 @@ class VeranstaltungResourceTest extends AbstractTestCase
 	use ReadsFile;
 
 	/**
+	 * @var \Tanzsport\ESV\API\MockClient
+	 */
+	private $client;
+
+	/**
 	 * @var \Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource
 	 */
 	private $resource;
 
-	public function setUp()
+	/**
+	 * @before
+	 */
+	public function before()
 	{
-		parent::setUp();
+		$this->client = $this->createClient();
 		$this->resource = $this->client->getVeranstaltungResource();
 	}
 

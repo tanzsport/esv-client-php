@@ -27,17 +27,15 @@ namespace Tanzsport\ESV\API;
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
 
-	/**
-	 * @var \Tanzsport\ESV\API\MockClient
-	 */
-	protected $client;
-
 	public function setUp()
 	{
 		parent::setUp();
 		date_default_timezone_set('Europe/Berlin');
+	}
 
-		$this->client = new MockClient(
+	protected function createClient()
+	{
+		return new MockClient(
 			new Endpunkt('http://test'), 'PHPUnit', 'token', 'user', 'password'
 		);
 	}
