@@ -26,7 +26,9 @@
 
 namespace Tanzsport\ESV\API\Cache\File;
 
-abstract class AbstractCacheTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class AbstractCacheTest extends TestCase
 {
 
 	protected function getDirectory()

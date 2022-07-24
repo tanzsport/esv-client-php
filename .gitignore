@@ -2,6 +2,7 @@
 .env.json
 .idea
 .DS_Store
+.phpunit.result.cache
 docs/
 reports/
 vendor/

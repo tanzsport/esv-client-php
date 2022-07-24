@@ -9,15 +9,20 @@
 			"email": "heneke@tanzsport.de"
 		}
 	],
+	"config":{
+		"platform": {
+			"php": "7.4"
+		}
+	},
 	"require": {
-		"php": ">= 5.6",
-		"guzzlehttp/guzzle": "^6.3",
-		"jms/serializer": "^1.13",
+		"php": ">= 7.4",
+		"guzzlehttp/guzzle": "^7.4",
+		"jms/serializer": "^3.17",
 		"psr/cache": "^1.0.1"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^5.7",
-		"mockery/mockery": "^1.2"
+		"phpunit/phpunit": "^9.5",
+		"mockery/mockery": "^1.5"
 	},
 	"autoload": {
 		"psr-4": {

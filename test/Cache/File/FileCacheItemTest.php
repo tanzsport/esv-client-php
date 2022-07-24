@@ -155,51 +155,51 @@ class FileCacheItemTest extends AbstractCacheTest
 
 	/**
 	 * @test
-	 * @expectedException \Tanzsport\ESV\API\Cache\File\InvalidArgumentException
-	 * @expectedExceptionMessage erforderlich
 	 */
 	public function key_null()
 	{
+		$this->expectExceptionMessage("erforderlich");
+		$this->expectException(\Tanzsport\ESV\API\Cache\File\InvalidArgumentException::class);
 		new FileCacheItem(null, '/foo');
 	}
 
 	/**
 	 * @test
-	 * @expectedException \Tanzsport\ESV\API\Cache\File\InvalidArgumentException
-	 * @expectedExceptionMessage String
 	 */
 	public function key_int()
 	{
+		$this->expectExceptionMessage("String");
+		$this->expectException(\Tanzsport\ESV\API\Cache\File\InvalidArgumentException::class);
 		new FileCacheItem(1, '/foo');
 	}
 
 	/**
 	 * @test
-	 * @expectedException \Tanzsport\ESV\API\Cache\File\InvalidArgumentException
-	 * @expectedExceptionMessage ungültig
 	 */
 	public function key_invalid()
 	{
+		$this->expectExceptionMessage("ungültig");
+		$this->expectException(\Tanzsport\ESV\API\Cache\File\InvalidArgumentException::class);
 		new FileCacheItem('/foo/bar', '/foo');
 	}
 
 	/**
 	 * @test
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage Ablaufzeitpunkt
 	 */
 	public function expiresat_invalid()
 	{
+		$this->expectExceptionMessage("Ablaufzeitpunkt");
+		$this->expectException(\InvalidArgumentException::class);
 		$this->item->expiresAt(array());
 	}
 
 	/**
 	 * @test
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage Ablaufzeit
 	 */
 	public function expiresafter_invalid()
 	{
+		$this->expectExceptionMessage("Ablaufzeit");
+		$this->expectException(\InvalidArgumentException::class);
 		$this->item->expiresAfter(array());
 	}
 }

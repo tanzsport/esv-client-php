@@ -26,10 +26,12 @@
 
 namespace Tanzsport\ESV\API;
 
-abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class AbstractTestCase extends TestCase
 {
 
-	public function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 		date_default_timezone_set('Europe/Berlin');

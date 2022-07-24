@@ -47,21 +47,21 @@ class FileCacheItemPoolTest extends AbstractCacheTest
 
 	/**
 	 * @test
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage Verzeichnis erforderlich
 	 */
 	public function create_nodir()
 	{
+		$this->expectExceptionMessage("Verzeichnis erforderlich");
+		$this->expectException(\InvalidArgumentException::class);
 		new FileCacheItemPool(null);
 	}
 
 	/**
 	 * @test
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage kein gültiges Verzeichnis
 	 */
 	public function create_notexists()
 	{
+		$this->expectExceptionMessage("kein gültiges Verzeichnis");
+		$this->expectException(\InvalidArgumentException::class);
 		new FileCacheItemPool('/foo/bar');
 	}
 
