@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/tanzsport/esv-client-php.svg?branch=master)](https://travis-ci.org/tanzsport/esv-client-php)
-
 # ESV-Client PHP #
 
 ## Installation ##
@@ -45,22 +43,3 @@ Der User-Agent kann frei gewählt werden, sollte aber sprechend sein.
 Einzelstarter können anhand Ihrer DTV-ID oder WDSF-MIN abgefragt werden:
 
 	$client->getStarterResource()->findeStarterNachDtvOderWdsfId('Einzel', 10000456);
-
-## Testsuite ausführen ##
-
-Um die PHPUnit-Tests ausführen zu können, ist eine lokale Konfigurationdatei **.env.json** mit folgendem Inhalt erforderlich:
-
-	{
-		"ESV_ENDPOINT": "Basis-URL",
-		"ESV_TOKEN": "Token",
-		"ESV_USER": "Benutzername",
-		"ESV_PASSWORD": "Passwort",
-		"ESV_VERIFY_SSL": 1
-	}	
-	
-
-	
-
-
-
-
