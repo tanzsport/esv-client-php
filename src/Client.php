@@ -30,8 +30,6 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use GuzzleHttp\Client as HttpClient;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
-use Tanzsport\ESV\API\Cache\CachingStrategy;
-use Tanzsport\ESV\API\Cache\NoCachingStrategy;
 use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
 use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
@@ -48,7 +46,6 @@ class Client
 
 	private static $SVC_HTTPCLIENT = 'esvHttpClient';
 	private static $SVC_SERIALIZER = 'serializer';
-	private static $SVC_CACHING = 'caching';
 	private static $SVC_RESOURCE_STARTER = 'resourceStarter';
 	private static $SVC_RESOURCE_FUNKTIONAER = 'resourceFunktionaer';
 	private static $SVC_RESOURCE_VERANSTALTUNG = 'resourceVeranstaltung';
@@ -103,13 +100,8 @@ class Client
 	 */
 	private $externalSerializer;
 
-	/**
-	 * @var CachingStrategy
-	 */
-	private $externalCachingStrategy;
-
 	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false,
-		$verifySsl = true, SerializerInterface $serializer = null, CachingStrategy $cachingStrategy = null)
+		$verifySsl = true, SerializerInterface $serializer = null)
 	{
 		if (!$userAgent) {
 			throw new \InvalidArgumentException('User-Agent erforderlich.');
@@ -133,7 +125,6 @@ class Client
 		$this->verifySsl = $verifySsl;
 
 		$this->externalSerializer = $serializer;
-		$this->externalCachingStrategy = $cachingStrategy;
 
 		$this->boot();
 	}
@@ -150,20 +141,16 @@ class Client
 			return $this->createSerializer();
 		});
 
-		$this->bind(self::$SVC_CACHING, function () {
-			return $this->createCachingStrategy();
-		});
-
 		$this->bind(self::$SVC_RESOURCE_STARTER, function () {
-			return new StarterResource($this->getHttpClient(), $this->getSerializer(), $this->getCachingStrategy());
+			return new StarterResource($this->getHttpClient(), $this->getSerializer());
 		});
 
 		$this->bind(self::$SVC_RESOURCE_FUNKTIONAER, function () {
-			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer(), $this->getCachingStrategy());
+			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer());
 		});
 
 		$this->bind(self::$SVC_RESOURCE_VERANSTALTUNG, function () {
-			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer(), $this->getCachingStrategy());
+			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer());
 		});
 	}
 
@@ -210,15 +197,6 @@ class Client
 		}
 	}
 
-	protected function createCachingStrategy()
-	{
-		if ($this->externalCachingStrategy != null) {
-			return $this->externalCachingStrategy;
-		} else {
-			return new NoCachingStrategy();
-		}
-	}
-
 	/**
 	 * Gibt die Funktionär-Resource zurück.
 	 *
@@ -247,16 +225,6 @@ class Client
 	public function getSerializer()
 	{
 		return $this->get(self::$SVC_SERIALIZER);
-	}
-
-	/**
-	 * Gibt die CachingStrategy zurück.
-	 *
-	 * @return CachingStrategy
-	 */
-	public function getCachingStrategy()
-	{
-		return $this->get(self::$SVC_CACHING);
 	}
 
 	/**

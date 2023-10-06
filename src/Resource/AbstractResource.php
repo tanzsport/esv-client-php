@@ -30,8 +30,6 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use JMS\Serializer\SerializerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Tanzsport\ESV\API\Cache\CachingStrategy;
 
 /**
  * Abstrakte Basis-Klasse für Resourcen. Benötigt einen HTTP-Client und einen
@@ -53,19 +51,13 @@ abstract class AbstractResource
 	protected $serializer;
 
 	/**
-	 * @var CachingStrategy
-	 */
-	protected $cachingStrategy;
-
-	/**
 	 * @param HttpClient $client
 	 * @param SerializerInterface $serializer
 	 */
-	public function __construct(HttpClient $client, SerializerInterface $serializer, CachingStrategy $cachingStrategy)
+	public function __construct(HttpClient $client, SerializerInterface $serializer)
 	{
 		$this->client = $client;
 		$this->serializer = $serializer;
-		$this->cachingStrategy = $cachingStrategy;
 	}
 
 	/**
@@ -77,7 +69,7 @@ abstract class AbstractResource
 	 * @throws ServerException
 	 * @throws \InvalidArgumentException
 	 */
-	protected function getForEntity($url, $type, $default = null, $cacheUntilNextDay = false)
+	protected function getForEntity($url, $type, $default = null)
 	{
 		if (!$url) {
 			throw new \InvalidArgumentException('URL erforderlich!');
@@ -86,22 +78,9 @@ abstract class AbstractResource
 			throw new \InvalidArgumentException('Typ erforderlich!');
 		}
 
-		$cached = $this->cachingStrategy->getCachedResponseEntity($url);
-		if ($cached != null) {
-			return $cached;
-		}
-
 		try {
 			$response = $this->client->get($url);
-			$entity = $this->deserializeJson($response->getBody(), $type, 'json') ?: $default;
-			if ($entity != null && $entity != $default) {
-				if ($cacheUntilNextDay) {
-					$this->cachingStrategy->cacheResponseEntityUntilNextDay($url, $entity);
-				} else {
-					$this->cachingStrategy->cacheResponseEntity($url, $entity);
-				}
-			}
-			return $entity;
+			return $this->deserializeJson($response->getBody(), $type, 'json') ?: $default;
 		} catch (ClientException $e) {
 			if ($e->getCode() == 404) {
 				return null;
