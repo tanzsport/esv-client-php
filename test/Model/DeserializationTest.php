@@ -99,6 +99,15 @@ class DeserializationTest extends AbstractTestCase
 	/**
 	 * @test
 	 */
+	public function funktionaer_MINString()
+	{
+		$f = $this->deserialize('Funktionaer_MINString.json', Funktionaer::class);
+		$this->assertEquals(10099999, $f->wdsfMin);
+	}
+
+	/**
+	 * @test
+	 */
 	public function flaeche()
 	{
 		$f = $this->deserialize('Flaeche.json', Flaeche::class);

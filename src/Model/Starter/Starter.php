@@ -35,65 +35,58 @@ use Tanzsport\ESV\API\Model\Person;
 /**
  * Basis-Klasse für Starter.
  *
- * @package Tanzsport\ESV\API\Model\Starter
  * @property-read int $id ID des Starters
  * @property-read Club $club Verein des Starters
  * @property-read string $staat Staat, für den der Starter startet
- *
- * @ExclusionPolicy("all")
  */
+#[ExclusionPolicy('all')]
 class Starter
 {
 
-	/**
-	 * @var int
-	 * @Type("integer")
-	 * @Expose
-	 */
-	private $id;
+	#[Type('integer')]
+	#[Expose]
+	private int $id;
 
 	/**
-	 * @var Person[]
-	 * @Type("array<Tanzsport\ESV\API\Model\Person>")
-	 * @Expose
+	 * @var array<Person>
 	 */
-	private $personen;
+	#[Type('array<Tanzsport\ESV\API\Model\Person>')]
+	#[Expose]
+	private array $personen = [];
 
-	/**
-	 * @var Club
-	 * @Type("Tanzsport\ESV\API\Model\Club")
-	 * @Expose
-	 */
-	private $club;
+	#[Type('Tanzsport\ESV\API\Model\Club')]
+	#[Expose]
+	private Club $club;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $staat;
+	#[Type('string')]
+	#[Expose]
+	private string $staat;
 
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'id':
 			case 'club':
 			case 'staat':
 				return $this->$key;
+			default:
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'id':
 			case 'club':
 			case 'staat':
 				return isset($this->$key);
+			default:
+				return false;
 		}
 	}
 
-	protected function getPerson($i)
+	protected function getPerson(int $i): Person
 	{
 		if (!isset($this->personen[$i])) {
 			throw new \InvalidArgumentException("Person mit Index {$i} ist nicht vorhanden.");
@@ -101,7 +94,7 @@ class Starter
 		return $this->personen[$i];
 	}
 
-	protected function personExists($i)
+	protected function personExists(int $i): bool
 	{
 		return isset($this->personen[$i]);
 	}

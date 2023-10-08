@@ -33,45 +33,31 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 /**
  * Fläche einer Turnierveranstaltung.
  *
- * @package Tanzsport\ESV\API\Model\Veranstaltung
  * @property-read string $id ID
  * @property-read string $typ Flächentyp
  * @property-read float $laenge Flächenlänge
  * @property-read float $breite Flächenbreite
- *
- * @ExclusionPolicy("all")
  */
+#[ExclusionPolicy('all')]
 class Flaeche
 {
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $id;
+	#[Type('string')]
+	#[Expose]
+	private string $id;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $typ;
+	#[Type('string')]
+	#[Expose]
+	private string $typ;
 
-	/**
-	 * @var float
-	 * @Type("double")
-	 * @Expose
-	 */
-	private $laenge;
+	#[Type('double')]
+	#[Expose]
+	private float $laenge;
 
-	/**
-	 * @var float
-	 * @Type("double")
-	 * @Expose
-	 */
-	private $breite;
+	#[Type('float')]
+	#[Expose]
+	private float $breite;
 
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'id':
@@ -79,10 +65,12 @@ class Flaeche
 			case 'laenge':
 			case 'breite':
 				return $this->$key;
+			default:
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'id':
@@ -90,6 +78,8 @@ class Flaeche
 			case 'laenge':
 			case 'breite':
 				return isset($this->$key);
+			default:
+				return false;
 		}
 	}
 

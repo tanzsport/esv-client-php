@@ -11,17 +11,25 @@
 	],
 	"config":{
 		"platform": {
-			"php": "7.4"
+			"php": "8.0"
+		},
+		"allow-plugins": {
+			"php-http/discovery": true
 		}
 	},
 	"require": {
-		"php": ">= 7.4",
-		"guzzlehttp/guzzle": "^7.4",
-		"jms/serializer": "^3.17"
+		"php": ">= 8.0",
+		"jms/serializer": "^3.17",
+		"php-http/discovery": "^1.17",
+		"psr/http-client-implementation": "*",
+		"psr/http-factory-implementation": "*",
+		"php-http/message": "^1.14"
 	},
 	"require-dev": {
+		"guzzlehttp/guzzle": "^7.4",
 		"phpunit/phpunit": "^9.5",
-		"mockery/mockery": "^1.5"
+		"mockery/mockery": "^1.5",
+		"phpstan/phpstan": "^1.10"
 	},
 	"autoload": {
 		"psr-4": {
@@ -37,6 +45,7 @@
 		"prepare-source": [
 			"licenser run src mit --replace-existing --owners \"Deutscher Tanzsportverband e.V.\"",
 			"licenser run test mit --replace-existing --owners \"Deutscher Tanzsportverband e.V.\""
-		]
+		],
+		"phpstan": "phpstan analyse"
 	}
 }

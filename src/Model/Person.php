@@ -99,7 +99,7 @@ class Person
 	 */
 	private $nationalitaet;
 
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'id':
@@ -111,10 +111,12 @@ class Person
 				return $this->$key;
 			case 'maennlich':
 				return $this->isMaennlich();
+			default:
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'id':
@@ -124,11 +126,13 @@ class Person
 			case 'wdsfMin':
 			case 'nationalitaet':
 				return isset($this->$key);
+			default:
+				return false;
 		}
 	}
 
-	private function isMaennlich()
+	private function isMaennlich(): bool
 	{
-		return strtolower($this->geschlecht) == Konstanten::GESCHLECHT_M;
+		return strtolower($this->geschlecht) === Konstanten::GESCHLECHT_M;
 	}
 }

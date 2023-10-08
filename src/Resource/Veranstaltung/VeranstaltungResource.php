@@ -38,17 +38,17 @@ use Tanzsport\ESV\API\Resource\AbstractResource;
 class VeranstaltungResource extends AbstractResource
 {
 
-	const URL_LIST = 'api/v1/veranstaltungen';
-	const URL_ID = 'api/v1/turniere/%1$s';
+	const PATH_LIST = 'veranstaltungen';
+	const PATH_ID = 'turniere/%1$s';
 
 	/**
 	 * Gibt alle Veranstaltungen zurück, auf die der aktuelle Benutzer Zugriff hat
 	 *
-	 * @return Veranstaltung[]
+	 * @return array<Veranstaltung>
 	 */
-	public function getVeranstaltungen()
+	public function getVeranstaltungen(): array
 	{
-		return $this->getForEntity(self::URL_LIST, $this->createTypedArrayDescriptor(Veranstaltung::class), []);
+		return $this->getForList(self::PATH_LIST, Veranstaltung::class);
 	}
 
 	/**
@@ -57,15 +57,8 @@ class VeranstaltungResource extends AbstractResource
 	 * @param $id ID der Veranstaltung
 	 * @return VeranstaltungMitTurnieren|null
 	 */
-	public function getVeranstaltungById($id)
+	public function getVeranstaltungById(int $id): ?VeranstaltungMitTurnieren
 	{
-		if (!$id) {
-			throw new \InvalidArgumentException('ID erforderlich.');
-		}
-		if (!is_numeric($id)) {
-			throw new \InvalidArgumentException('ID muss numerisch sein.');
-		}
-
-		return $this->getForEntity(sprintf(self::URL_ID, $id), VeranstaltungMitTurnieren::class);
+		return $this->getForEntity(sprintf(self::PATH_ID, $id), VeranstaltungMitTurnieren::class);
 	}
 }

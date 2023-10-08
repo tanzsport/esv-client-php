@@ -1,0 +1,13 @@
+includes:
+
+parameters:
+    level: 9
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: '#is never written, only read#'
+            path: src/Model/*
+        -
+            message: '#should return array<T>#'
+            path: src/Resource/AbstractResource.php

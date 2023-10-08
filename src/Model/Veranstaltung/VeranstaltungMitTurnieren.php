@@ -36,106 +36,124 @@ use Tanzsport\ESV\API\Model\Funktionaer\Funktionaer;
 /**
  * Vollständige Daten einer Turnierveranstaltung.
  *
- * @package Tanzsport\ESV\API\Model\Veranstaltung
- *
- * @ExclusionPolicy("all")
+ * @property-read int $id
+ * @property-read \DateTime $datumVon Beginndatum der Veranstaltung
+ * @property-read \DateTime $datumBis Enddatum der Veranstaltung
+ * @property-read Turnierstaette $turnierstaette Turnierstätte
+ * @property-read Club $veranstalter Veranstalter
+ * @property-read Club $ausrichter Ausrichter
+ * @property-read string|null $titel Titel
+ * @property-read string|null $bemerkung Bemerkungen
+ * @property-read array<Funktionaer> $wertungsrichter Wertungsrichter der Veranstaltung
+ * @property-read array<Funktionaer> $funktionaer Turnierfunktionäre der Veranstaltung
+ * @property-read array<Flaeche> $flaechen Turnierflächen
+ * @property-read array<Turnier> $turniere Turniere
  */
-class VeranstaltungMitTurnieren extends Veranstaltung
+#[ExclusionPolicy('all')]
+class VeranstaltungMitTurnieren
 {
 
-	/**
-	 * @var Turnierstaette
-	 * @type("Tanzsport\ESV\API\Model\Veranstaltung\Turnierstaette")
-	 * @Expose
-	 */
-	private $turnierstaette;
+	#[Type('integer')]
+	#[Expose]
+	private int $id;
+
+	#[Type('DateTime')]
+	#[SerializedName('datumVon')]
+	#[Expose]
+	private \DateTime $datumVon;
+
+	#[Type('DateTime')]
+	#[SerializedName('datumBis')]
+	#[Expose]
+	private \DateTime $datumBis;
+
+	#[Type('Tanzsport\ESV\API\Model\Veranstaltung\Turnierstaette')]
+	#[Expose]
+	private Turnierstaette $turnierstaette;
+
+	#[Type('Tanzsport\ESV\API\Model\Club')]
+	#[Expose]
+	private Club $veranstalter;
+
+	#[Type('Tanzsport\ESV\API\Model\Club')]
+	#[Expose]
+	private Club $ausrichter;
+
+	#[Type('string')]
+	#[Expose]
+	private ?string $titel;
+
+	#[Type('string')]
+	#[Expose]
+	private ?string $bemerkung;
 
 	/**
-	 * @var Club
-	 * @Type("Tanzsport\ESV\API\Model\Club")
-	 * @Expose
+	 * @var array<Funktionaer>
 	 */
-	private $veranstalter;
+	#[Type('array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>')]
+	#[Expose]
+	private array $wertungsrichter = [];
 
 	/**
-	 * @var Club
-	 * @Type("Tanzsport\ESV\API\Model\Club")
-	 * @Expose
+	 * @var array<Funktionaer>
 	 */
-	private $ausrichter;
-
-	private $bemerkungen;
+	#[Type('array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>')]
+	#[Expose]
+	private array $funktionaere = [];
 
 	/**
-	 * @var Funktionaer[]
-	 * @Type("array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>")
-	 * @Expose
+	 * @var array<Flaeche>
 	 */
-	private $wertungsrichter;
+	#[Type('array<Tanzsport\ESV\API\Model\Veranstaltung\Flaeche>')]
+	#[Expose]
+	private array $flaechen = [];
 
 	/**
-	 * @var Funktionaer[]
-	 * @Type("array<Tanzsport\ESV\API\Model\Funktionaer\Funktionaer>")
-	 * @Expose
+	 * @var array<Turnier>
 	 */
-	private $funktionaere;
+	#[Type('array<Tanzsport\ESV\API\Model\Veranstaltung\Turnier>')]
+	#[Expose]
+	private array $turniere = [];
 
-	/**
-	 * @var Flaeche[]
-	 * @Type("array<Tanzsport\ESV\API\Model\Veranstaltung\Flaeche>")
-	 * @Expose
-	 */
-	private $flaechen;
-
-	/**
-	 * @var Turnier[]
-	 * @Type("array<Tanzsport\ESV\API\Model\Veranstaltung\Turnier>")
-	 * @Expose
-	 */
-	private $turniere;
-
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
+			case 'id':
+			case 'datumVon':
+			case 'datumBis':
 			case 'turnierstaette':
 			case 'veranstalter':
 			case 'ausrichter':
-			case 'bemerkungen':
+			case 'titel':
+			case 'bemerkung':
 			case 'wertungsrichter':
 			case 'funktionaere':
 			case 'flaechen':
 			case 'turniere':
 				return $this->$key;
-			case 'ort':
-				return $this->getOrt();
 			default:
-				return parent::__get($key);
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
+			case 'id':
+			case 'datumVon':
+			case 'datumBis':
 			case 'turnierstaette':
 			case 'veranstalter':
 			case 'ausrichter':
-			case 'bemerkungen':
+			case 'titel':
+			case 'bemerkung':
 			case 'wertungsrichter':
 			case 'funktionaere':
 			case 'flaechen':
 			case 'turniere':
 				return isset($this->$key);
-			case 'ort':
-				return $this->getOrt() != null;
 			default:
-				return parent::__isset($key);
-		}
-	}
-
-	private function getOrt()
-	{
-		if (isset($this->turnierstaette)) {
-			return $this->turnierstaette->ort;
+				return false;
 		}
 	}
 }

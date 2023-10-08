@@ -34,24 +34,14 @@ namespace Tanzsport\ESV\API;
 class Endpunkt
 {
 
-	const Q1 = 'http://ev-q1.tanzsport-portal.de';
-	const Q2 = 'http://ev-q2.tanzsport-portal.de';
-	const PROD = 'https://ev.tanzsport-portal.de';
+	const PROD = 'https://ev.tanzsport-portal.de/api/v1';
 
-	/**
-	 * @var string
-	 */
-	private $baseUrl;
+	const QA = 'https://dtv-esv-qa.azurewebsites.net/api/v1';
 
-	/**
-	 * @param string $baseUrl Basis-URL; vorgegebene Endpunkte sind Q1, Q2, PROD (freie Eingabe möglich)
-	 */
-	public function __construct($baseUrl)
+	public function __construct(
+		private string $baseUrl
+	)
 	{
-		if (!$baseUrl) {
-			throw new \InvalidArgumentException('Basis-URL erforderlich');
-		}
-		$this->baseUrl = $baseUrl;
 	}
 
 	/**
@@ -59,8 +49,28 @@ class Endpunkt
 	 *
 	 * @return string
 	 */
-	public function getBaseUrl()
+	public function getBaseUrl(): string
 	{
 		return $this->baseUrl;
+	}
+
+	/**
+	 * Endpunkt für das Produktivsystem.
+	 *
+	 * @return Endpunkt
+	 */
+	static function Prod(): Endpunkt
+	{
+		return new Endpunkt(self::PROD);
+	}
+
+	/**
+	 * Endpunkt für das QA-System.
+	 *
+	 * @return Endpunkt
+	 */
+	static function Qa(): Endpunkt
+	{
+		return new Endpunkt(self::QA);
 	}
 }

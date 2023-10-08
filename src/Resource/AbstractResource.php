@@ -26,10 +26,13 @@
 
 namespace Tanzsport\ESV\API\Resource;
 
-use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use JMS\Serializer\SerializerInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
+use Psr\Http\Message\UriInterface;
+use Tanzsport\ESV\API\Endpunkt;
 
 /**
  * Abstrakte Basis-Klasse für Resourcen. Benötigt einen HTTP-Client und einen
@@ -40,62 +43,76 @@ use JMS\Serializer\SerializerInterface;
 abstract class AbstractResource
 {
 
-	/**
-	 * @var Client
-	 */
-	protected $client;
-
-	/**
-	 * @var SerializerInterface
-	 */
-	protected $serializer;
-
-	/**
-	 * @param HttpClient $client
-	 * @param SerializerInterface $serializer
-	 */
-	public function __construct(HttpClient $client, SerializerInterface $serializer)
+	public function __construct(
+		private Endpunkt                $endpunkt,
+		private ClientInterface         $client,
+		private UriFactoryInterface     $uriFactory,
+		private RequestFactoryInterface $requestFactory,
+		private SerializerInterface     $serializer
+	)
 	{
-		$this->client = $client;
-		$this->serializer = $serializer;
 	}
 
 	/**
-	 * @param string $url relative URL
-	 * @param string $type Typ-Deklaration
-	 * @param mixed $default Standard-Wert, wenn der API-Aufruf keinen Wert zurückgibt
-	 * @return mixed
-	 * @throws ClientException
-	 * @throws ServerException
-	 * @throws \InvalidArgumentException
+	 * @template T of mixed
+	 *
+	 * @param string $path
+	 * @param class-string<T> $type
+	 * @param T|null $default
+	 * @return T|null
+	 *
+	 * @throws \Psr\Http\Client\ClientExceptionInterface
 	 */
-	protected function getForEntity($url, $type, $default = null)
+	protected function getForEntity(string $path, string $type, mixed $default = null): mixed
 	{
-		if (!$url) {
-			throw new \InvalidArgumentException('URL erforderlich!');
-		}
-		if (!$type) {
-			throw new \InvalidArgumentException('Typ erforderlich!');
-		}
-
-		try {
-			$response = $this->client->get($url);
-			return $this->deserializeJson($response->getBody(), $type, 'json') ?: $default;
-		} catch (ClientException $e) {
-			if ($e->getCode() == 404) {
-				return null;
-			}
-			throw $e;
+		$response = $this->client->sendRequest($this->createRequest('GET', $path));
+		if ($response->getStatusCode() === 200) {
+			return $this->deserializeJson($response->getBody(), $type) ?: $default;
+		} else if ($response->getStatusCode() === 404) {
+			return $default;
+		} else {
+			throw new \RuntimeException('error');
 		}
 	}
 
-	protected function createTypedArrayDescriptor($type)
+	/**
+	 * @template T of mixed
+	 *
+	 * @param string $path
+	 * @param class-string<T> $itemType
+	 * @return array<T>
+	 *
+	 * @throws \Psr\Http\Client\ClientExceptionInterface
+	 */
+	protected function getForList(string $path, string $itemType): array
+	{
+		$response = $this->client->sendRequest($this->createRequest('GET', $path));
+		if ($response->getStatusCode() === 200) {
+			return $this->deserializeJson($response->getBody(), $this->createTypedArrayDescriptor($itemType)) ?: [];
+		} else if ($response->getStatusCode() === 404) {
+			return [];
+		} else {
+			throw new \RuntimeException('error');
+		}
+	}
+
+	protected function createTypedArrayDescriptor(string $type): string
 	{
 		return sprintf('array<%1$s>', $type);
 	}
 
-	private function deserializeJson($data, $type)
+	private function deserializeJson(string $data, string $type): mixed
 	{
 		return $this->serializer->deserialize($data, $type, 'json');
+	}
+
+	private function createRequest(string $method, string $path): RequestInterface
+	{
+		return $this->requestFactory->createRequest(strtoupper($method), $this->createUri($path));
+	}
+
+	private function createUri(string $path): UriInterface
+	{
+		return $this->uriFactory->createUri(sprintf('%1$s/%2$s', $this->endpunkt->getBaseUrl(), $path));
 	}
 }

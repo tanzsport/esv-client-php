@@ -47,7 +47,10 @@ class Konstanten
 	const GESCHLECHT_M = 'm';
 	const GESCHLECHT_W = 'w';
 
-	private static $wa = array(self::WA_DUO, self::WA_EINZEL, self::WA_FORMATION_JMD, self::WA_FORMATION_STLAT,
+	/**
+	 * @var array<string>
+	 */
+	private static array $wa = array(self::WA_DUO, self::WA_EINZEL, self::WA_FORMATION_JMD, self::WA_FORMATION_STLAT,
 		self::WA_MANNSCHAFT, self::WA_SMALLGROUP, self::WA_SOLO, self::WA_SOLO_MAENNLICH, self::WA_SOLO_WEIBLICH);
 
 	private function __construct()
@@ -57,9 +60,9 @@ class Konstanten
 	/**
 	 * Gibt alle Wettbewerbsarten zurück.
 	 *
-	 * @return string[]
+	 * @return array<string>
 	 */
-	public static function getWettbewerbsarten()
+	public static function getWettbewerbsarten(): array
 	{
 		return self::$wa;
 	}

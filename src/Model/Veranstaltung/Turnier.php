@@ -31,21 +31,19 @@ use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\SerializedName;
 use Tanzsport\ESV\API\Model\Club;
-use Tanzsport\ESV\API\Model\Funktionaer\Funktionaer;
 
 /**
  * Turnier in einer Turnierveranstaltung.
  *
- * @package Tanzsport\ESV\API\Model\Veranstaltung
  * @property-read int $id ID
  * @property-read \DateTime $datumVon Beginndatum Turnier
  * @property-read \DateTime $datumBis Enddatum Turnier
  * @property-read string $startzeitPlan geplante Startzeit
- * @property-read string $startzeitPlanKorrigiert korrigierte Plan-Startzeit
- * @property-read string $titel Turniertitel
- * @property-read Club $veranstalter Turnierveranstalter
- * @property-read Club $ausrichter Turnierausrichter
- * @property-read string $flaechenId ID der Fläche
+ * @property-read string|null $startzeitPlanKorrigiert korrigierte Plan-Startzeit
+ * @property-read string|null $titel Turniertitel
+ * @property-read Club|null $veranstalter Turnierveranstalter
+ * @property-read Club|null $ausrichter Turnierausrichter
+ * @property-read string|null $flaechenId ID der Fläche
  * @property-read string $wettbewerbsart Wettbewerbsart
  * @property-read string $turnierform Turnierform
  * @property-read string $startgruppe Startgruppe
@@ -55,211 +53,137 @@ use Tanzsport\ESV\API\Model\Funktionaer\Funktionaer;
  * @property-read boolean $wanderpokal Wanderpokal ja/nein
  * @property-read int $turnierrang Turnierrang
  * @property-read boolean $aufstiegsturnier Vergabe von Aufstiegspunkten und -plätzen ja/nein
- * @property-read string $ranglistenId ID der zugehörigen Rangliste
- * @property-read int $wdsfTurnierId Turnier-ID der WDSF sofern vorhanden
- * @property-read string $startgebuehr Startgebühr
- * @property-read string $bemerkungen Bemerkungen
+ * @property-read string|null $ranglistenId ID der zugehörigen Rangliste
+ * @property-read int|null $wdsfTurnierId Turnier-ID der WDSF sofern vorhanden
+ * @property-read string|null $startgebuehr Startgebühr
+ * @property-read string|null $bemerkungen Bemerkungen
  * @property-read string[] $wertungsrichter DTV-IDs der eingesetzten Wertungsrichter
- * @property-read string $turnierleiter DTV-ID des eingesetzten Turnierleiters
- * @property-read string $beisitzer DTV-ID des eingesetzten Beisitzers
- * @property-read string $chairman DTV-ID des eingesetzten Chairmans
- *
- * @ExclusionPolicy("all")
+ * @property-read string|null $turnierleiter DTV-ID des eingesetzten Turnierleiters
+ * @property-read string|null $beisitzer DTV-ID des eingesetzten Beisitzers
+ * @property-read string|null $chairman DTV-ID des eingesetzten Chairmans
  */
+#[ExclusionPolicy('all')]
 class Turnier
 {
-	/**
-	 * @var int
-	 * @Type("integer")
-	 * @Expose
-	 */
-	private $id;
+	#[Type('integer')]
+	#[Expose]
+	private int $id;
+
+	#[Type('DateTime')]
+	#[SerializedName('datumVon')]
+	#[Expose]
+	private \DateTime $datumVon;
+
+	#[Type('DateTime')]
+	#[SerializedName('datumBis')]
+	#[Expose]
+	private \DateTime $datumBis;
+
+	#[Type('string')]
+	#[SerializedName('startzeitPlan')]
+	#[Expose]
+	private string $startzeitPlan;
+
+	#[Type('string')]
+	#[SerializedName('startzeitPlanKorrigiert')]
+	#[Expose]
+	private ?string $startzeitPlanKorrigiert = null;
+
+	#[Type('string')]
+	#[Expose]
+	private ?string $titel = null;
+
+	#[Type('Tanzsport\ESV\API\Model\Club')]
+	#[Expose]
+	private ?Club $veranstalter;
+
+	#[Type('Tanzsport\ESV\API\Model\Club')]
+	#[Expose]
+	private ?Club $ausrichter;
+
+	#[Type('string')]
+	#[SerializedName('flaechenId')]
+	#[Expose]
+	private ?string $flaechenId = null;
+
+	#[Type('string')]
+	#[Expose]
+	private string $wettbewerbsart;
+
+	#[Type('string')]
+	#[Expose]
+	private string $turnierform;
+
+	#[Type('string')]
+	#[Expose]
+	private string $startgruppe;
+
+	#[Type('string')]
+	#[SerializedName('startklasseLiga')]
+	#[Expose]
+	private string $startklasseLiga;
+
+	#[Type('string')]
+	#[Expose]
+	private string $turnierart;
 
 	/**
-	 * @var \DateTime
-	 * @Type("DateTime")
-	 * @SerializedName("datumVon")
-	 * @Expose
+	 * @var array<string>
 	 */
-	private $datumVon;
+	#[Type('array<string>')]
+	#[Expose]
+	private array $zulassung = [];
+
+	#[Type('bool')]
+	#[Expose]
+	private bool $wanderpokal;
+
+	#[Type('int')]
+	#[Expose]
+	private int $turnierrang;
+
+	#[Type('bool')]
+	#[Expose]
+	private bool $aufstiegsturnier;
+
+	#[Type('string')]
+	#[SerializedName('ranglistenId')]
+	#[Expose]
+	private ?string $ranglistenId = null;
+
+	#[Type('int')]
+	#[SerializedName('wdsfTurnierId')]
+	#[Expose]
+	private ?int $wdsfTurnierId = null;
+
+	#[Type('string')]
+	#[Expose]
+	private ?string $startgebuehr = null;
+
+	#[Type('string')]
+	#[Expose]
+	private ?string $bemerkungen = null;
 
 	/**
-	 * @var \DateTime
-	 * @Type("DateTime")
-	 * @SerializedName("datumBis")
-	 * @Expose
+	 * @var array<string>
 	 */
-	private $datumBis;
+	#[Type('array<string>')]
+	#[Expose]
+	private array $wertungsrichter = [];
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @SerializedName("startzeitPlan")
-	 * @Expose
-	 */
-	private $startzeitPlan;
+	#[Type('string')]
+	#[Expose]
+	private ?string $turnierleiter = null;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @SerializedName("startzeitPlanKorrigiert")
-	 * @Expose
-	 */
-	private $startzeitPlanKorrigiert;
+	#[Type('string')]
+	#[Expose]
+	private ?string $beisitzer = null;
 
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $titel;
+	#[Type('string')]
+	#[Expose]
+	private ?string $chairman = null;
 
-	/**
-	 * @var Club
-	 * @Type("Tanzsport\ESV\API\Model\Club")
-	 * @Expose
-	 */
-	private $veranstalter;
-
-	/**
-	 * @var Club
-	 * @Type("Tanzsport\ESV\API\Model\Club")
-	 * @Expose
-	 */
-	private $ausrichter;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @SerializedName("flaechenId")
-	 * @Expose
-	 */
-	private $flaechenId;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $wettbewerbsart;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $turnierform;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $startgruppe;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @SerializedName("startklasseLiga")
-	 * @Expose
-	 */
-	private $startklasseLiga;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $turnierart;
-
-	/**
-	 * @var string[]
-	 * @type("array<string>")
-	 * @Expose
-	 */
-	private $zulassung;
-
-	/**
-	 * @var bool
-	 * @type("boolean")
-	 * @Expose
-	 */
-	private $wanderpokal;
-
-	/**
-	 * @var int
-	 * @type("integer")
-	 * @Expose
-	 */
-	private $turnierrang;
-
-	/**
-	 * @var bool
-	 * @type("boolean")
-	 * @Expose
-	 */
-	private $aufstiegsturnier;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @SerializedName("ranglistenId")
-	 * @Expose
-	 */
-	private $ranglistenId;
-
-	/**
-	 * @var int
-	 * @type("integer")
-	 * @SerializedName("wdsfTurnierId")
-	 * @Expose
-	 */
-	private $wdsfTurnierId;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $startgebuehr;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $bemerkungen;
-
-
-	/**
-	 * @var string[]
-	 * @type("array<string>")
-	 * @Expose
-	 */
-	private $wertungsrichter;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $turnierleiter;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $beisitzer;
-
-	/**
-	 * @var string
-	 * @type("string")
-	 * @Expose
-	 */
-	private $chairman;
-
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'id':
@@ -289,10 +213,12 @@ class Turnier
 			case 'beisitzer':
 			case 'chairman':
 				return $this->$key;
+			default:
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'id':
@@ -322,6 +248,8 @@ class Turnier
 			case 'beisitzer':
 			case 'chairman':
 				return isset($this->$key);
+			default:
+				return false;
 		}
 	}
 }

@@ -31,14 +31,13 @@ use Tanzsport\ESV\API\Model\Person;
 /**
  * Starter vom Typ Paar.
  *
- * @package Tanzsport\ESV\API\Model\Starter
  * @property-read Person $partner Partner
  * @property-read Person $partnerin Partnerin
  */
 class Paar extends Starter
 {
 
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'partner':
@@ -50,7 +49,7 @@ class Paar extends Starter
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'partner':

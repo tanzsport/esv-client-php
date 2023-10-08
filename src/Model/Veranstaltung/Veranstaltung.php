@@ -34,56 +34,39 @@ use JMS\Serializer\Annotation\SerializedName;
 /**
  * Turnierveranstaltung in der Veranstaltungsliste.
  *
- * @package Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung
  * @property-read int $id ID
  * @property-read DateTime $datumVon Beginndatum der Veranstaltung
  * @property-read DateTime $datumBis Enddatum der Veranstaltung
  * @property-read string $ort Ort
- * @property-read string $titel Titel
- *
- * @ExclusionPolicy("all")
+ * @property-read string|null $titel Titel
  */
+#[ExclusionPolicy('all')]
 class Veranstaltung
 {
 
-	/**
-	 * @var int
-	 * @Type("integer")
-	 * @Expose
-	 */
-	private $id;
+	#[Type('integer')]
+	#[Expose]
+	private int $id;
 
-	/**
-	 * @var \DateTime
-	 * @Type("DateTime")
-	 * @SerializedName("datumVon")
-	 * @Expose
-	 */
-	private $datumVon;
+	#[Type('DateTime')]
+	#[SerializedName('datumVon')]
+	#[Expose]
+	private \DateTime $datumVon;
 
-	/**
-	 * @var \DateTime
-	 * @Type("DateTime")
-	 * @SerializedName("datumBis")
-	 * @Expose
-	 */
-	private $datumBis;
+	#[Type('DateTime')]
+	#[SerializedName('datumBis')]
+	#[Expose]
+	private \DateTime $datumBis;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $ort;
+	#[Type('string')]
+	#[Expose]
+	private string $ort;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $titel;
+	#[Type('string')]
+	#[Expose]
+	private ?string $titel;
 
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'id':
@@ -92,10 +75,12 @@ class Veranstaltung
 			case 'ort':
 			case 'titel':
 				return $this->$key;
+			default:
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'id':
@@ -104,6 +89,8 @@ class Veranstaltung
 			case 'ort':
 			case 'titel':
 				return isset($this->$key);
+			default:
+				return false;
 		}
 	}
 }

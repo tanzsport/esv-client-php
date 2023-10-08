@@ -27,9 +27,14 @@
 namespace Tanzsport\ESV\API;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use GuzzleHttp\Client as HttpClient;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
+use Tanzsport\ESV\API\Http\EsvRequestFactory;
 use Tanzsport\ESV\API\Resource\Funktionaer\FunktionaerResource;
 use Tanzsport\ESV\API\Resource\Starter\StarterResource;
 use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
@@ -44,150 +49,113 @@ use Tanzsport\ESV\API\Resource\Veranstaltung\VeranstaltungResource;
 class Client
 {
 
-	private static $SVC_HTTPCLIENT = 'esvHttpClient';
-	private static $SVC_SERIALIZER = 'serializer';
-	private static $SVC_RESOURCE_STARTER = 'resourceStarter';
-	private static $SVC_RESOURCE_FUNKTIONAER = 'resourceFunktionaer';
-	private static $SVC_RESOURCE_VERANSTALTUNG = 'resourceVeranstaltung';
+	/**
+	 * @var array<string, callable>
+	 */
+	private array $container;
 
 	/**
-	 * @var Endpunkt
+	 * @var array<string, object>
 	 */
-	private $endpunkt;
+	private array $serviceInstances;
 
-	/**
-	 * @var string
-	 */
-	private $userAgent;
-
-	/**
-	 * @var string
-	 */
-	private $token;
-
-	/**
-	 * @var string
-	 */
-	private $user;
-
-	/**
-	 * @var string
-	 */
-	private $password;
-
-	/**
-	 * @var bool
-	 */
-	private $compress;
-
-	/**
-	 * @var bool
-	 */
-	private $verifySsl;
-
-	/**
-	 * @var array
-	 */
-	private $container;
-
-	/**
-	 * @var array
-	 */
-	private $serviceInstances;
-
-	/**
-	 * @var SerializerInterface
-	 */
-	private $externalSerializer;
-
-	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password, $compress = false,
-		$verifySsl = true, SerializerInterface $serializer = null)
+	public function __construct(
+		private Endpunkt             $endpunkt,
+		private string               $userAgent,
+		private string               $token,
+		private string               $user,
+		private string               $password,
+		private ?SerializerInterface $externalSerializer = null
+	)
 	{
-		if (!$userAgent) {
-			throw new \InvalidArgumentException('User-Agent erforderlich.');
-		}
-		if (!$token) {
-			throw new \InvalidArgumentException('Token erforderlich.');
-		}
-		if (!$user) {
-			throw new \InvalidArgumentException('Benutzername erforderlich.');
-		}
-		if (!$password) {
-			throw new \InvalidArgumentException('Passwort erforderlich.');
-		}
-
-		$this->endpunkt = $endpunkt;
-		$this->userAgent = $userAgent;
-		$this->token = $token;
-		$this->user = $user;
-		$this->password = $password;
-		$this->compress = $compress;
-		$this->verifySsl = $verifySsl;
-
-		$this->externalSerializer = $serializer;
-
 		$this->boot();
 	}
 
-	private function boot()
+	private function boot(): void
 	{
 		$this->container = [];
 
-		$this->bind(self::$SVC_HTTPCLIENT, function () {
+		$this->bind(ClientInterface::class, function () {
 			return $this->createHttpClient();
 		});
 
-		$this->bind(self::$SVC_SERIALIZER, function () {
+		$this->bind(SerializerInterface::class, function () {
 			return $this->createSerializer();
 		});
 
-		$this->bind(self::$SVC_RESOURCE_STARTER, function () {
-			return new StarterResource($this->getHttpClient(), $this->getSerializer());
+		$this->bind(UriFactoryInterface::class, function () {
+			return Psr17FactoryDiscovery::findRequestFactory();
 		});
 
-		$this->bind(self::$SVC_RESOURCE_FUNKTIONAER, function () {
-			return new FunktionaerResource($this->getHttpClient(), $this->getSerializer());
+		$this->bind(RequestFactoryInterface::class, function () {
+			return new EsvRequestFactory(
+				Psr17FactoryDiscovery::findRequestFactory(),
+				$this->userAgent,
+				$this->token,
+				$this->user,
+				$this->password
+			);
 		});
 
-		$this->bind(self::$SVC_RESOURCE_VERANSTALTUNG, function () {
-			return new VeranstaltungResource($this->getHttpClient(), $this->getSerializer());
+		$this->bind(StarterResource::class, function () {
+			return new StarterResource(
+				$this->endpunkt,
+				$this->get(ClientInterface::class),
+				$this->get(UriFactoryInterface::class),
+				$this->get(RequestFactoryInterface::class),
+				$this->get(SerializerInterface::class)
+			);
+		});
+
+		$this->bind(FunktionaerResource::class, function () {
+			return new FunktionaerResource(
+				$this->endpunkt,
+				$this->get(ClientInterface::class),
+				$this->get(UriFactoryInterface::class),
+				$this->get(RequestFactoryInterface::class),
+				$this->get(SerializerInterface::class)
+			);
+		});
+
+		$this->bind(VeranstaltungResource::class, function () {
+			return new VeranstaltungResource(
+				$this->endpunkt,
+				$this->get(ClientInterface::class),
+				$this->get(UriFactoryInterface::class),
+				$this->get(RequestFactoryInterface::class),
+				$this->get(SerializerInterface::class)
+			);
 		});
 	}
 
-	private function bind($key, callable $callable)
+	private function bind(string $class, callable $factory): void
 	{
-		if (!$key) {
-			throw new \InvalidArgumentException('Key erforderlich!');
-		}
-		$this->container[$key] = $callable;
+		$this->container[$class] = $factory;
 	}
 
-	private function get($key)
+	/**
+	 * @template T of object
+	 *
+	 * @param class-string<T> $class
+	 * @return T
+	 */
+	private function get(string $class): object
 	{
-		if (!$key) {
-			throw new \InvalidArgumentException('Key erforderlich!');
+		if (!isset($this->serviceInstances[$class])) {
+			if (!isset($this->container[$class])) {
+				throw new \InvalidArgumentException("Service '{$class}' is not defined!");
+			}
+			$this->serviceInstances[$class] = call_user_func($this->container[$class]);
 		}
-		if (!isset($this->serviceInstances[$key])) {
-			$this->serviceInstances[$key] = call_user_func($this->container[$key]);
-		}
-		return $this->serviceInstances[$key];
+		return $this->serviceInstances[$class];
 	}
 
-	protected function createHttpClient()
+	protected function createHttpClient(): ClientInterface
 	{
-		return new HttpClient([
-			'base_uri' => $this->endpunkt->getBaseUrl(),
-			'verify' => $this->verifySsl,
-			'decode_content' => $this->compress,
-			'auth' => [$this->user, $this->password],
-			'headers' => array_merge(
-				['User-Agent' => sprintf('%1$s; Token=%2$s', $this->userAgent, $this->token)],
-				$this->compress ? ['Accept-Encoding' => 'gzip'] : []
-			)
-		]);
+		return Psr18ClientDiscovery::find();
 	}
 
-	protected function createSerializer()
+	protected function createSerializer(): SerializerInterface
 	{
 		if ($this->externalSerializer != null) {
 			return $this->externalSerializer;
@@ -202,19 +170,19 @@ class Client
 	 *
 	 * @return FunktionaerResource
 	 */
-	public function getFunktionaerResource()
+	public function getFunktionaerResource(): FunktionaerResource
 	{
-		return $this->get(self::$SVC_RESOURCE_FUNKTIONAER);
+		return $this->get(FunktionaerResource::class);
 	}
 
 	/**
 	 * Gibt den HTTP-Client zurück.
 	 *
-	 * @return HttpClient
+	 * @return ClientInterface
 	 */
-	public function getHttpClient()
+	public function getHttpClient(): ClientInterface
 	{
-		return $this->get(self::$SVC_HTTPCLIENT);
+		return $this->get(ClientInterface::class);
 	}
 
 	/**
@@ -222,9 +190,9 @@ class Client
 	 *
 	 * @return SerializerInterface
 	 */
-	public function getSerializer()
+	public function getSerializer(): SerializerInterface
 	{
-		return $this->get(self::$SVC_SERIALIZER);
+		return $this->get(SerializerInterface::class);
 	}
 
 	/**
@@ -232,9 +200,9 @@ class Client
 	 *
 	 * @return StarterResource
 	 */
-	public function getStarterResource()
+	public function getStarterResource(): StarterResource
 	{
-		return $this->get(self::$SVC_RESOURCE_STARTER);
+		return $this->get(StarterResource::class);
 	}
 
 	/**
@@ -242,8 +210,8 @@ class Client
 	 *
 	 * @return VeranstaltungResource
 	 */
-	public function getVeranstaltungResource()
+	public function getVeranstaltungResource(): VeranstaltungResource
 	{
-		return $this->get(self::$SVC_RESOURCE_VERANSTALTUNG);
+		return $this->get(VeranstaltungResource::class);
 	}
 }

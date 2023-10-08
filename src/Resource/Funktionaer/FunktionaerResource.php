@@ -37,31 +37,27 @@ use Tanzsport\ESV\API\Resource\AbstractResource;
 class FunktionaerResource extends AbstractResource
 {
 
-	const URL_ID = 'api/v1/funktionaer/%1$s';
-	const URL_LIST = 'api/v1/funktionaere';
+	const PATH_ID = 'funktionaer/%1$s';
+	const PATH_LIST = 'funktionaere';
 
 	/**
 	 * Sucht einen Funktionär anhand seiner DTV-ID; gibt null zurück, falls kein entsprechender Funktionär gefunden wird.
 	 *
-	 * @param $id DTV-ID des Funktionärs
+	 * @param string $id DTV-ID des Funktionärs
 	 * @return Funktionaer|null
 	 */
-	public function findeFunktionaerNachDtvId($id)
+	public function findeFunktionaerNachDtvId(string $id): ?Funktionaer
 	{
-		if (!$id) {
-			throw new \InvalidArgumentException('DTV-ID erforderlich!');
-		}
-
-		return $this->getForEntity(sprintf(self::URL_ID, $id), Funktionaer::class);
+		return $this->getForEntity(sprintf(self::PATH_ID, $id), Funktionaer::class);
 	}
 
 	/**
 	 * Lädt die Gesamtliste aller Funktionäre (aus Datenschutzgründen ohne Titel und Vor- sowie Nachnamen).
 	 *
-	 * @return Funktionaer[]
+	 * @return array<Funktionaer>
 	 */
-	public function findeAlleFunktionaere()
+	public function findeAlleFunktionaere(): array
 	{
-		return $this->getForEntity(sprintf(self::URL_LIST), $this->createTypedArrayDescriptor(Funktionaer::class), []);
+		return $this->getForList(self::PATH_LIST, Funktionaer::class);
 	}
 }

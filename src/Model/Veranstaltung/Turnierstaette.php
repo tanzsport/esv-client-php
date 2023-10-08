@@ -33,46 +33,32 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 /**
  * Turnierstätte einer Turnierveranstaltung.
  *
- * @package Tanzsport\ESV\API\Model\Veranstaltung
- * @property-read $name string Name der Turnierstätte
- * @property-read $anschrift string Anschrift der Turnierstätte (Straße + Nr)
- * @property-read $plz string PLZ
- * @property-read $ort string Ort
- *
- * @ExclusionPolicy("all")
+ * @property-read string $name Name der Turnierstätte
+ * @property-read string $anschrift Anschrift der Turnierstätte (Straße + Nr)
+ * @property-read string $plz PLZ
+ * @property-read string $ort Ort
  */
+#[ExclusionPolicy('all')]
 class Turnierstaette
 {
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $name;
+	#[Type('string')]
+	#[Expose]
+	private string $name;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $anschrift;
+	#[Type('string')]
+	#[Expose]
+	private string $anschrift;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $plz;
+	#[Type('string')]
+	#[Expose]
+	private string $plz;
 
-	/**
-	 * @var string
-	 * @Type("string")
-	 * @Expose
-	 */
-	private $ort;
+	#[Type('string')]
+	#[Expose]
+	private string $ort;
 
-	public function __get($key)
+	public function __get(string $key): mixed
 	{
 		switch ($key) {
 			case 'name':
@@ -80,10 +66,12 @@ class Turnierstaette
 			case 'plz':
 			case 'ort':
 				return $this->$key;
+			default:
+				return null;
 		}
 	}
 
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		switch ($key) {
 			case 'name':
@@ -91,6 +79,8 @@ class Turnierstaette
 			case 'plz':
 			case 'ort':
 				return isset($this->$key);
+			default:
+				return false;
 		}
 	}
 }
