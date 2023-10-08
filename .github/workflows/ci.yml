@@ -13,7 +13,7 @@ jobs:
         with:
           php_version: '8.0'
 
-      - uses: php-actions/phpstan@master
+      - uses: php-actions/phpstan@v3
         with:
           php_version: '8.0'
 
