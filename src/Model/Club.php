@@ -35,7 +35,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *
  * @property-read int $id ID des Vereins
  * @property-read string $name Name des Vereins
- * @property-read LTV $ltv Landesverband des Vereins
+ * @property-read LTV|null $ltv Landesverband des Vereins
  */
 #[ExclusionPolicy('all')]
 class Club

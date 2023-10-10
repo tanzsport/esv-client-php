@@ -35,8 +35,8 @@ use JMS\Serializer\Annotation\SerializedName;
  * Turnierveranstaltung in der Veranstaltungsliste.
  *
  * @property-read int $id ID
- * @property-read DateTime $datumVon Beginndatum der Veranstaltung
- * @property-read DateTime $datumBis Enddatum der Veranstaltung
+ * @property-read \DateTime $datumVon Beginndatum der Veranstaltung
+ * @property-read \DateTime $datumBis Enddatum der Veranstaltung
  * @property-read string $ort Ort
  * @property-read string|null $titel Titel
  */
