@@ -33,6 +33,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use Tanzsport\ESV\API\Endpunkt;
+use Tanzsport\ESV\API\Http\HttpException;
 
 /**
  * Abstrakte Basis-Klasse für Resourcen. Benötigt einen HTTP-Client und einen
@@ -62,6 +63,7 @@ abstract class AbstractResource
 	 * @return T|null
 	 *
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
+	 * @throws HttpException
 	 */
 	protected function getForEntity(string $path, string $type, mixed $default = null): mixed
 	{
@@ -71,7 +73,7 @@ abstract class AbstractResource
 		} else if ($response->getStatusCode() === 404) {
 			return $default;
 		} else {
-			throw new \RuntimeException('error');
+			throw new HttpException($response);
 		}
 	}
 
@@ -83,6 +85,7 @@ abstract class AbstractResource
 	 * @return array<T>
 	 *
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
+	 * @throws HttpException
 	 */
 	protected function getForList(string $path, string $itemType): array
 	{
@@ -92,7 +95,7 @@ abstract class AbstractResource
 		} else if ($response->getStatusCode() === 404) {
 			return [];
 		} else {
-			throw new \RuntimeException('error');
+			throw new HttpException($response);
 		}
 	}
 
