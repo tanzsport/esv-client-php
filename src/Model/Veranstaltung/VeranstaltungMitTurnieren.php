@@ -81,11 +81,11 @@ class VeranstaltungMitTurnieren
 
 	#[Type('string')]
 	#[Expose]
-	private ?string $titel;
+	private ?string $titel = null;
 
 	#[Type('string')]
 	#[Expose]
-	private ?string $bemerkung;
+	private ?string $bemerkung = null;
 
 	/**
 	 * @var array<Funktionaer>

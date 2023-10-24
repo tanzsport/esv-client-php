@@ -64,7 +64,7 @@ class Veranstaltung
 
 	#[Type('string')]
 	#[Expose]
-	private ?string $titel;
+	private ?string $titel = null;
 
 	public function __get(string $key): mixed
 	{

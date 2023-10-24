@@ -51,7 +51,7 @@ class Club
 
 	#[Type('Tanzsport\ESV\API\Model\LTV')]
 	#[Expose]
-	private ?LTV $ltv;
+	private ?LTV $ltv = null;
 
 	public function __get(string $key): mixed
 	{
