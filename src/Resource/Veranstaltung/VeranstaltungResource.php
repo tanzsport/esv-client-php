@@ -48,7 +48,8 @@ class VeranstaltungResource extends AbstractResource
 	 */
 	public function getVeranstaltungen(): array
 	{
-		return $this->getForList(self::PATH_LIST, Veranstaltung::class);
+		return $this->getForList(self::PATH_LIST, Veranstaltung::class,
+			'application/vnd.tanzsport.esv.v1.veranstaltungsliste.l2+json');
 	}
 
 	/**
@@ -59,6 +60,7 @@ class VeranstaltungResource extends AbstractResource
 	 */
 	public function getVeranstaltungById(int $id): ?VeranstaltungMitTurnieren
 	{
-		return $this->getForEntity(sprintf(self::PATH_ID, $id), VeranstaltungMitTurnieren::class);
+		return $this->getForEntity(sprintf(self::PATH_ID, $id), VeranstaltungMitTurnieren::class, null,
+			'application/vnd.tanzsport.esv.v1.veranstaltung.l2+json');
 	}
 }

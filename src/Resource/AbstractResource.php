@@ -65,9 +65,9 @@ abstract class AbstractResource
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
 	 * @throws HttpException
 	 */
-	protected function getForEntity(string $path, string $type, mixed $default = null): mixed
+	protected function getForEntity(string $path, string $type, mixed $default = null, ?string $accept = null): mixed
 	{
-		$response = $this->client->sendRequest($this->createRequest('GET', $path));
+		$response = $this->client->sendRequest($this->createRequest('GET', $path, $accept));
 		if ($response->getStatusCode() === 200) {
 			return $this->deserializeJson($response->getBody(), $type) ?: $default;
 		} else if ($response->getStatusCode() === 404) {
@@ -87,9 +87,9 @@ abstract class AbstractResource
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
 	 * @throws HttpException
 	 */
-	protected function getForList(string $path, string $itemType): array
+	protected function getForList(string $path, string $itemType, ?string $accept = null): array
 	{
-		$response = $this->client->sendRequest($this->createRequest('GET', $path));
+		$response = $this->client->sendRequest($this->createRequest('GET', $path, $accept));
 		if ($response->getStatusCode() === 200) {
 			return $this->deserializeJson($response->getBody(), $this->createTypedArrayDescriptor($itemType)) ?: [];
 		} else if ($response->getStatusCode() === 404) {
@@ -109,9 +109,13 @@ abstract class AbstractResource
 		return $this->serializer->deserialize($data, $type, 'json');
 	}
 
-	private function createRequest(string $method, string $path): RequestInterface
+	private function createRequest(string $method, string $path, ?string $accept = null): RequestInterface
 	{
-		return $this->requestFactory->createRequest(strtoupper($method), $this->createUri($path));
+		$request = $this->requestFactory->createRequest(strtoupper($method), $this->createUri($path));
+		if ($accept) {
+			$request = $request->withHeader('Accept', $accept);
+		}
+		return $request;
 	}
 
 	private function createUri(string $path): UriInterface
