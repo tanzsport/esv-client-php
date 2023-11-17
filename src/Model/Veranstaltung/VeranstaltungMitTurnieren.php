@@ -40,8 +40,8 @@ use Tanzsport\ESV\API\Model\Funktionaer\Funktionaer;
  * @property-read \DateTime $datumVon Beginndatum der Veranstaltung
  * @property-read \DateTime $datumBis Enddatum der Veranstaltung
  * @property-read Turnierstaette $turnierstaette Turnierstätte
- * @property-read Club $veranstalter Veranstalter
- * @property-read Club $ausrichter Ausrichter
+ * @property-read Club|null $veranstalter Veranstalter
+ * @property-read Club|null $ausrichter Ausrichter
  * @property-read string|null $titel Titel
  * @property-read string|null $bemerkung Bemerkungen
  * @property-read array<Funktionaer> $wertungsrichter Wertungsrichter der Veranstaltung
@@ -73,11 +73,11 @@ class VeranstaltungMitTurnieren
 
 	#[Type('Tanzsport\ESV\API\Model\Club')]
 	#[Expose]
-	private Club $veranstalter;
+	private ?Club $veranstalter = null;
 
 	#[Type('Tanzsport\ESV\API\Model\Club')]
 	#[Expose]
-	private Club $ausrichter;
+	private ?Club $ausrichter = null;
 
 	#[Type('string')]
 	#[Expose]
