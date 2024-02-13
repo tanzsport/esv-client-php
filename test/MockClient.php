@@ -29,11 +29,13 @@ namespace Tanzsport\ESV\API;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Psr\Http\Client\ClientInterface;
 
 class MockClient extends Client
 {
 
+	private array $container = [];
 	private MockHandler $mockHandler;
 
 	public function __construct(Endpunkt $endpunkt, $userAgent, $token, $user, $password)
@@ -44,11 +46,19 @@ class MockClient extends Client
 
 	protected function createHttpClient(): ClientInterface
 	{
-		return new HttpClient(['handler' => HandlerStack::create($this->mockHandler)]);
+		$handlerStack = HandlerStack::create($this->mockHandler);
+		$handlerStack->push(Middleware::history($this->container));
+
+		return new HttpClient(['handler' => $handlerStack]);
 	}
 
 	public function getMockHandler(): MockHandler
 	{
 		return $this->mockHandler;
+	}
+
+	public function getHistory(): array
+	{
+		return $this->container;
 	}
 }

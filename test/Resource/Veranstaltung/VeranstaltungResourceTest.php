@@ -26,6 +26,7 @@
 
 namespace Tanzsport\ESV\API\Resource\Veranstaltung;
 
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Tanzsport\ESV\API\AbstractTestCase;
 use Tanzsport\ESV\API\ReadsFile;
@@ -69,6 +70,27 @@ class VeranstaltungResourceTest extends AbstractTestCase
 			$this->assertTrue(is_a($v, 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung'));
 		}
 		$this->assertCount(0, $this->client->getMockHandler());
+	}
+
+	/**
+	 * @test
+	 */
+	public function listeMitLtv()
+	{
+		$container = [];
+		$history = Middleware::history($container);
+
+		$this->client->getMockHandler()->append(
+			new Response(200, ['content-type' => 'application/json'], $this->readFile(__DIR__ . '/json/liste.json'))
+		);
+		$liste = $this->resource->getVeranstaltungen('LTVBerlin');
+		$this->assertNotNull($liste);
+		$this->assertCount(2, $liste);
+		foreach ($liste as $v) {
+			$this->assertTrue(is_a($v, 'Tanzsport\ESV\API\Model\Veranstaltung\Veranstaltung'));
+		}
+		$this->assertCount(0, $this->client->getMockHandler());
+		$this->assertEquals('ltv=LTVBerlin', $this->client->getHistory()[0]['request']->getUri()->getQuery());
 	}
 
 	/**

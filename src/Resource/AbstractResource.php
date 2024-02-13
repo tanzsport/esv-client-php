@@ -34,9 +34,10 @@ use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use Tanzsport\ESV\API\Endpunkt;
 use Tanzsport\ESV\API\Http\HttpException;
+use Tanzsport\ESV\API\Utils;
 
 /**
- * Abstrakte Basis-Klasse für Resourcen. Benötigt einen HTTP-Client und einen
+ * Abstrakte Basis-Klasse für Ressourcen. Benötigt einen HTTP-Client und einen
  * Serializer.
  *
  * @package Tanzsport\ESV\API\Resource
@@ -60,14 +61,16 @@ abstract class AbstractResource
 	 * @param string $path
 	 * @param class-string<T> $type
 	 * @param T|null $default
+	 * @param string|null $accept
+	 * @param array<string, bool|float|int|string|array<bool|float|int|string>> $query
 	 * @return T|null
 	 *
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
 	 * @throws HttpException
 	 */
-	protected function getForEntity(string $path, string $type, mixed $default = null, ?string $accept = null): mixed
+	protected function getForEntity(string $path, string $type, mixed $default = null, ?string $accept = null, ?array $query = null): mixed
 	{
-		$response = $this->client->sendRequest($this->createRequest('GET', $path, $accept));
+		$response = $this->client->sendRequest($this->createRequest('GET', $path, $accept, $query));
 		if ($response->getStatusCode() === 200) {
 			return $this->deserializeJson($response->getBody(), $type) ?: $default;
 		} else if ($response->getStatusCode() === 404) {
@@ -82,14 +85,16 @@ abstract class AbstractResource
 	 *
 	 * @param string $path
 	 * @param class-string<T> $itemType
+	 * @param string|null $accept
+	 * @param array<string, bool|float|int|string|array<bool|float|int|string>> $query
 	 * @return array<T>
 	 *
 	 * @throws \Psr\Http\Client\ClientExceptionInterface
 	 * @throws HttpException
 	 */
-	protected function getForList(string $path, string $itemType, ?string $accept = null): array
+	protected function getForList(string $path, string $itemType, ?string $accept = null, ?array $query = null): array
 	{
-		$response = $this->client->sendRequest($this->createRequest('GET', $path, $accept));
+		$response = $this->client->sendRequest($this->createRequest('GET', $path, $accept, $query));
 		if ($response->getStatusCode() === 200) {
 			return $this->deserializeJson($response->getBody(), $this->createTypedArrayDescriptor($itemType)) ?: [];
 		} else if ($response->getStatusCode() === 404) {
@@ -109,9 +114,14 @@ abstract class AbstractResource
 		return $this->serializer->deserialize($data, $type, 'json');
 	}
 
-	private function createRequest(string $method, string $path, ?string $accept = null): RequestInterface
+	/**
+	 * @param array<string, bool|float|int|string|array<bool|float|int|string>> $query
+	 */
+	private function createRequest(string $method, string $path, ?string $accept = null, ?array $query = null): RequestInterface
 	{
-		$request = $this->requestFactory->createRequest(strtoupper($method), $this->createUri($path));
+		$uri = $this->createUri($path)
+			->withQuery($query ? Utils::createQueryString($query) : '');
+		$request = $this->requestFactory->createRequest(strtoupper($method), $uri);
 		if ($accept) {
 			$request = $request->withHeader('Accept', $accept);
 		}

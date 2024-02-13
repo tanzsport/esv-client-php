@@ -46,10 +46,10 @@ class VeranstaltungResource extends AbstractResource
 	 *
 	 * @return array<Veranstaltung>
 	 */
-	public function getVeranstaltungen(): array
+	public function getVeranstaltungen(?string $ltv = null): array
 	{
 		return $this->getForList(self::PATH_LIST, Veranstaltung::class,
-			'application/vnd.tanzsport.esv.v1.veranstaltungsliste.l2+json');
+			'application/vnd.tanzsport.esv.v1.veranstaltungsliste.l2+json', $ltv ? ['ltv' => $ltv] : null);
 	}
 
 	/**
